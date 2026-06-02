@@ -31,6 +31,13 @@ yarn-error.log*
 # vercel
 .vercel
 
+# project management documents and tooling — not application code, never commit
+CLAUDE.md
+requirements.md
+tasks.md
+plan.md
+STATUS.md
+
 # typescript
 *.tsbuildinfo
 next-env.d.ts
