@@ -240,6 +240,77 @@ describe('createHospital — EWKT location encoding', () => {
   });
 });
 
+describe('deleteHospital — delete call', () => {
+  it('calls delete on the hospitals table with the correct id', async () => {
+    const eq = vi.fn().mockResolvedValue({ error: null });
+    const del = vi.fn().mockReturnValue({ eq });
+    const mockClient = {
+      from: vi.fn().mockReturnValue({ delete: del }),
+    } as unknown as ReturnType<typeof createClient>;
+
+    await deleteHospital(mockClient, 'abc-123');
+
+    expect(del).toHaveBeenCalled();
+    expect(eq).toHaveBeenCalledWith('id', 'abc-123');
+  });
+
+  it('throws when delete returns an error', async () => {
+    const mockClient = {
+      from: vi.fn().mockReturnValue({
+        delete: vi.fn().mockReturnValue({
+          eq: vi.fn().mockResolvedValue({ error: { message: 'not found' } }),
+        }),
+      }),
+    } as unknown as ReturnType<typeof createClient>;
+
+    await expect(deleteHospital(mockClient, 'bad-id')).rejects.toEqual({ message: 'not found' });
+  });
+});
+
+describe('moderateReview — status update', () => {
+  it('updates the review to approved', async () => {
+    const update = vi.fn().mockReturnValue({
+      eq: vi.fn().mockReturnValue({
+        select: vi.fn().mockReturnValue({
+          single: vi.fn().mockResolvedValue({
+            data: { id: 'r1', status: 'approved' },
+            error: null,
+          }),
+        }),
+      }),
+    });
+    const mockClient = {
+      from: vi.fn().mockReturnValue({ update }),
+    } as unknown as ReturnType<typeof createClient>;
+
+    const result = await moderateReview(mockClient, 'r1', 'approved');
+
+    expect(update).toHaveBeenCalledWith({ status: 'approved' });
+    expect(result.status).toBe('approved');
+  });
+
+  it('updates the review to hidden', async () => {
+    const update = vi.fn().mockReturnValue({
+      eq: vi.fn().mockReturnValue({
+        select: vi.fn().mockReturnValue({
+          single: vi.fn().mockResolvedValue({
+            data: { id: 'r2', status: 'hidden' },
+            error: null,
+          }),
+        }),
+      }),
+    });
+    const mockClient = {
+      from: vi.fn().mockReturnValue({ update }),
+    } as unknown as ReturnType<typeof createClient>;
+
+    const result = await moderateReview(mockClient, 'r2', 'hidden');
+
+    expect(update).toHaveBeenCalledWith({ status: 'hidden' });
+    expect(result.status).toBe('hidden');
+  });
+});
+
 // ─── Integration tests: PostGIS ST_DWithin against real seeded data ───────────
 // These tests require NEXT_PUBLIC_SUPABASE_URL and NEXT_PUBLIC_SUPABASE_ANON_KEY
 // to be present in .env.local. They are skipped in CI environments where those

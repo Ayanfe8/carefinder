@@ -1,34 +1,48 @@
-import type { Metadata } from "next";
-import localFont from "next/font/local";
-import "./globals.css";
+import type { Metadata } from 'next';
+import localFont from 'next/font/local';
+import Link from 'next/link';
+import './globals.css';
 
 const geistSans = localFont({
-  src: "./fonts/GeistVF.woff",
-  variable: "--font-geist-sans",
-  weight: "100 900",
-});
-const geistMono = localFont({
-  src: "./fonts/GeistMonoVF.woff",
-  variable: "--font-geist-mono",
-  weight: "100 900",
+  src: './fonts/GeistVF.woff',
+  variable: '--font-geist-sans',
+  weight: '100 900',
 });
 
 export const metadata: Metadata = {
-  title: 'Carefinder',
-  description: "Nigeria's Civic Hospital Directory & Health Access Platform",
+  title: {
+    default: 'Carefinder',
+    template: '%s | Carefinder',
+  },
+  description: "Nigeria's civic hospital directory — find, filter, and share hospital information.",
 };
 
-export default function RootLayout({
-  children,
-}: Readonly<{
-  children: React.ReactNode;
-}>) {
+export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="en">
-      <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
-      >
-        {children}
+      <body className={`${geistSans.variable} font-sans antialiased bg-white text-gray-900`}>
+        <header className="border-b border-gray-200 bg-white sticky top-0 z-40">
+          <div className="max-w-6xl mx-auto px-4 h-14 flex items-center justify-between">
+            <Link href="/" className="font-semibold text-lg text-emerald-700 tracking-tight">
+              Carefinder
+            </Link>
+            <nav className="flex items-center gap-6 text-sm">
+              <Link href="/search" className="text-gray-600 hover:text-gray-900 transition-colors">
+                Find Hospitals
+              </Link>
+              <Link
+                href="/login"
+                className="text-gray-600 hover:text-gray-900 transition-colors"
+              >
+                Sign In
+              </Link>
+            </nav>
+          </div>
+        </header>
+        <main>{children}</main>
+        <footer className="border-t border-gray-200 mt-20 py-8 text-center text-sm text-gray-500">
+          © {new Date().getFullYear()} Carefinder · Nigeria&apos;s Civic Hospital Directory
+        </footer>
       </body>
     </html>
   );

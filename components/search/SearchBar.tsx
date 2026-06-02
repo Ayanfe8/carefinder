@@ -1,0 +1,71 @@
+'use client';
+
+import { useState, useRef, useCallback, useEffect } from 'react';
+import { useRouter, usePathname, useSearchParams } from 'next/navigation';
+
+interface SearchBarProps {
+  defaultValue?: string;
+}
+
+export function SearchBar({ defaultValue = '' }: SearchBarProps) {
+  const router = useRouter();
+  const pathname = usePathname();
+  const searchParams = useSearchParams();
+  const [value, setValue] = useState(defaultValue);
+  const debounceRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+
+  // Keep local state in sync when URL changes externally (e.g. browser back/forward)
+  useEffect(() => {
+    setValue(searchParams.get('q') ?? '');
+  }, [searchParams]);
+
+  const navigate = useCallback(
+    (query: string) => {
+      const params = new URLSearchParams(searchParams.toString());
+      if (query.trim()) {
+        params.set('q', query.trim());
+      } else {
+        params.delete('q');
+      }
+      router.push(`${pathname}?${params.toString()}`);
+    },
+    [router, pathname, searchParams]
+  );
+
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const next = e.target.value;
+    setValue(next);
+    if (debounceRef.current) clearTimeout(debounceRef.current);
+    debounceRef.current = setTimeout(() => navigate(next), 300);
+  };
+
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (debounceRef.current) clearTimeout(debounceRef.current);
+    navigate(value);
+  };
+
+  return (
+    <form
+      role="search"
+      aria-label="Search hospitals"
+      onSubmit={handleSubmit}
+      className="flex gap-2"
+    >
+      <input
+        type="search"
+        value={value}
+        onChange={handleChange}
+        placeholder="Search by name, city, or LGA…"
+        aria-label="Search hospitals by name, city, or LGA"
+        className="flex-1 rounded-lg border border-gray-300 px-4 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-transparent"
+      />
+      <button
+        type="submit"
+        className="bg-emerald-600 hover:bg-emerald-700 text-white text-sm font-medium px-5 py-2 rounded-lg transition-colors"
+      >
+        Search
+      </button>
+    </form>
+  );
+}

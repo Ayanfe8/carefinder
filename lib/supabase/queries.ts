@@ -28,7 +28,7 @@ export async function getHospitalById(
     .maybeSingle()
 
   if (error) throw error
-  return data as Hospital | null
+  return data as unknown as Hospital | null
 }
 
 /**
@@ -65,7 +65,7 @@ export async function searchHospitals(
   })
 
   if (error) throw error
-  return (data ?? []) as Hospital[]
+  return (data ?? []) as unknown as Hospital[]
 }
 
 // ─── Reviews ──────────────────────────────────────────────────────────────────
@@ -126,7 +126,7 @@ export async function submitReview(
     .single()
 
   if (error) throw error
-  return data as Review
+  return data as unknown as Review
 }
 
 // ─── Admin mutations ──────────────────────────────────────────────────────────
@@ -164,7 +164,7 @@ export async function createHospital(
     .single()
 
   if (error) throw error
-  return data as Hospital
+  return data as unknown as Hospital
 }
 
 /**
@@ -200,7 +200,7 @@ export async function updateHospital(
     .single()
 
   if (error) throw error
-  return data as Hospital
+  return data as unknown as Hospital
 }
 
 /**
@@ -234,5 +234,5 @@ export async function moderateReview(
     .single()
 
   if (error) throw error
-  return data as Review
+  return data as unknown as Review
 }
