@@ -14,9 +14,11 @@ export function SearchBar({ defaultValue = '' }: SearchBarProps) {
   const [value, setValue] = useState(defaultValue);
   const debounceRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
-  // Keep local state in sync when URL changes externally (e.g. browser back/forward)
+  // Sync from URL when the browser navigates back/forward — only if q param is set.
+  // When q is absent from URL, leave the current value intact (preserves defaultValue).
   useEffect(() => {
-    setValue(searchParams.get('q') ?? '');
+    const q = searchParams.get('q');
+    if (q !== null) setValue(q);
   }, [searchParams]);
 
   const navigate = useCallback(

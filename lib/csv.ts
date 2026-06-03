@@ -69,7 +69,7 @@ export function exportHospitalsCSV(
   const slug =
     query.trim() === ''
       ? 'all'
-      : query.trim().toLowerCase().replace(/[^a-z0-9]+/g, '-');
+      : query.trim().toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '');
   const filename = `hospitals-${slug}-${date}.csv`;
 
   const anchor = document.createElement('a');
@@ -84,6 +84,6 @@ export function buildCSVFilename(query: string): string {
   const slug =
     query.trim() === ''
       ? 'all'
-      : query.trim().toLowerCase().replace(/[^a-z0-9]+/g, '-');
+      : query.trim().toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '');
   return `hospitals-${slug}-${date}.csv`;
 }

@@ -2,23 +2,8 @@
 
 import Image from 'next/image';
 import { useMemo } from 'react';
-import DOMPurify from 'dompurify';
-import { marked } from 'marked';
+import { sanitizeMarkdown } from '@/lib/sanitize';
 import type { Hospital, Review, HospitalImage } from '@/lib/types';
-
-interface HospitalDetailProps {
-  hospital: Hospital;
-  images?: HospitalImage[];
-  reviews?: Review[];
-}
-
-function safeMarkdownToHtml(md: string): string {
-  const rawHtml = marked.parse(md, { async: false }) as string;
-  return DOMPurify.sanitize(rawHtml, {
-    ALLOWED_TAGS: ['p', 'strong', 'em', 'ul', 'ol', 'li', 'a', 'h1', 'h2', 'h3', 'h4', 'br'],
-    ALLOWED_ATTR: ['href', 'target', 'rel'],
-  });
-}
 
 function StarRating({ value, count }: { value: number; count: number }) {
   const filled = Math.round(value);
@@ -56,12 +41,12 @@ function ReviewCard({ review }: { review: Review }) {
 
 export function HospitalDetail({ hospital, images = [], reviews = [] }: HospitalDetailProps) {
   const descriptionHtml = useMemo(
-    () => (hospital.description_md ? safeMarkdownToHtml(hospital.description_md) : null),
+    () => (hospital.description_md ? sanitizeMarkdown(hospital.description_md) : null),
     [hospital.description_md]
   );
 
   const visitingHoursHtml = useMemo(
-    () => (hospital.visiting_hours ? safeMarkdownToHtml(hospital.visiting_hours) : null),
+    () => (hospital.visiting_hours ? sanitizeMarkdown(hospital.visiting_hours) : null),
     [hospital.visiting_hours]
   );
 
