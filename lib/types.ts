@@ -15,6 +15,9 @@ export interface Hospital {
   status: 'draft' | 'pending_review' | 'published';
   created_by: string | null;
   created_at: string;
+  // Returned by search_hospitals RPC — present on search results, absent on direct lookups
+  latitude?: number;
+  longitude?: number;
   // Computed by PostGIS ST_Distance — present only when radius search is active
   distance_km?: number;
 }

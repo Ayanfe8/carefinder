@@ -4,6 +4,7 @@ import { searchHospitals } from '@/lib/supabase/queries';
 import { SearchBar } from '@/components/search/SearchBar';
 import { FilterPanel } from '@/components/search/FilterPanel';
 import { ResultsList } from '@/components/search/ResultsList';
+import { MapToggle } from '@/components/search/MapToggle';
 import type { SearchFilters, Pagination } from '@/lib/types';
 import type { Metadata } from 'next';
 
@@ -90,8 +91,19 @@ export default async function SearchPage({ searchParams }: SearchPageProps) {
           </Suspense>
         </div>
 
-        {/* Results */}
+        {/* Results + Map */}
         <div className="flex-1 min-w-0">
+          {/* Map/list toggle — map only initialises when user explicitly switches */}
+          <MapToggle
+            hospitals={hospitals}
+            userLocation={
+              filters.lat != null && filters.lng != null
+                ? [filters.lng, filters.lat]
+                : null
+            }
+            radiusKm={filters.radius}
+          />
+
           <Suspense
             fallback={
               <div className="space-y-3">

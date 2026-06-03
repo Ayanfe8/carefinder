@@ -25,6 +25,7 @@
     "@supabase/ssr": "^0.10.3",
     "@supabase/supabase-js": "^2.106.2",
     "dompurify": "^3.4.7",
+    "mapbox-gl": "^3.24.0",
     "marked": "^18.0.4",
     "next": "14.2.35",
     "papaparse": "^5.5.3",
