@@ -1,11 +1,9 @@
 'use client';
 
 import { useState } from 'react';
-import { useRouter } from 'next/navigation';
 import { createClient } from '@/lib/supabase/client';
 
 export default function AdminLoginPage() {
-  const router = useRouter();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState<string | null>(null);
@@ -28,9 +26,9 @@ export default function AdminLoginPage() {
       return;
     }
 
-    // Refresh server state so middleware re-reads the new session cookie.
-    router.refresh();
-    router.push('/admin/dashboard');
+    // Hard redirect — avoids client-side router state preservation that can
+    // leave the button stuck in loading state if middleware redirects back.
+    window.location.href = '/admin/dashboard';
   };
 
   return (

@@ -48,22 +48,16 @@ export async function middleware(request: NextRequest) {
     return NextResponse.redirect(new URL('/admin/login', request.url));
   }
 
-  // Decode the JWT to read the custom `role` claim injected by Migration 007.
-  // getUser() already validated the token, so local decoding is safe here.
-  const { data: { session } } = await supabase.auth.getSession();
-  let role: string | null = null;
-  if (session?.access_token) {
-    try {
-      const payload = JSON.parse(
-        atob(session.access_token.split('.')[1]!.replace(/-/g, '+').replace(/_/g, '/'))
-      );
-      role = (payload as Record<string, unknown>).role as string ?? null;
-    } catch {
-      // Malformed token — treat as unauthorised.
-    }
-  }
+  // Check the user's role from public.users.
+  // getUser() already validated the JWT, so querying by user.id is safe and
+  // always returns the current role (avoids getSession() Edge Runtime quirks).
+  const { data: userData } = await supabase
+    .from('users')
+    .select('role')
+    .eq('id', user.id)
+    .single();
 
-  if (role !== 'admin') {
+  if (userData?.role !== 'admin') {
     return NextResponse.redirect(new URL('/admin/login', request.url));
   }
 
