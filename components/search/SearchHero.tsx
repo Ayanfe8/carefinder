@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useCallback } from 'react';
+import { useState, useCallback, useRef } from 'react';
 import { useRouter } from 'next/navigation';
 
 type GeoStatus = 'idle' | 'loading' | 'granted' | 'denied';
@@ -8,6 +8,7 @@ type GeoStatus = 'idle' | 'loading' | 'granted' | 'denied';
 export function SearchHero() {
   const router = useRouter();
   const [query, setQuery] = useState('');
+  const inputRef = useRef<HTMLInputElement>(null);
   const [geoStatus, setGeoStatus] = useState<GeoStatus>('idle');
   const [coords, setCoords] = useState<{ lat: number; lng: number } | null>(null);
   const [radius, setRadius] = useState(10);
@@ -32,10 +33,12 @@ export function SearchHero() {
     );
   }, []);
 
-  const handleSearch = (e: React.FormEvent) => {
-    e.preventDefault();
+  // Read directly from the DOM ref so navigation always uses the current input
+  // value regardless of React state batching (important for Playwright click tests).
+  const handleSearch = useCallback(() => {
+    const value = (inputRef.current?.value ?? query).trim();
     const params = new URLSearchParams();
-    if (query.trim()) params.set('q', query.trim());
+    if (value) params.set('q', value);
     if (coords && geoStatus === 'granted') {
       params.set('lat', String(coords.lat));
       params.set('lng', String(coords.lng));
@@ -43,7 +46,7 @@ export function SearchHero() {
     }
     const qs = params.toString();
     router.push(`/search${qs ? `?${qs}` : ''}`);
-  };
+  }, [router, query, coords, geoStatus, radius]);
 
   return (
     <section className="bg-gradient-to-b from-emerald-50 to-white py-20 px-4">
@@ -55,9 +58,14 @@ export function SearchHero() {
           Search by name, city, or LGA. Filter by specialty, ownership, and distance.
         </p>
 
-        <form onSubmit={handleSearch} role="search" aria-label="Hospital search">
+        <form
+          role="search"
+          aria-label="Hospital search"
+          onSubmit={(e) => { e.preventDefault(); handleSearch(); }}
+        >
           <div className="flex gap-2 mb-4">
             <input
+              ref={inputRef}
               type="search"
               value={query}
               onChange={(e) => setQuery(e.target.value)}
@@ -66,7 +74,8 @@ export function SearchHero() {
               className="flex-1 rounded-lg border border-gray-300 px-4 py-3 text-base focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-transparent"
             />
             <button
-              type="submit"
+              type="button"
+              onClick={handleSearch}
               className="bg-emerald-600 hover:bg-emerald-700 text-white font-medium px-6 py-3 rounded-lg transition-colors"
             >
               Search

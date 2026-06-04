@@ -44,7 +44,6 @@ export function ExportButton({ hospitals, query = '' }: ExportButtonProps) {
         type="button"
         onClick={() => setOpen(true)}
         className="text-sm text-gray-600 hover:text-emerald-600 border border-gray-300 hover:border-emerald-400 px-3 py-1.5 rounded-lg transition-colors"
-        aria-label={`Export ${hospitals.length} hospitals as CSV`}
       >
         Export CSV
       </button>
