@@ -2,6 +2,7 @@
 
 import { useState, useMemo } from 'react';
 import { HospitalCard } from '@/components/hospital/HospitalCard';
+import { ExportButton } from '@/components/ui/ExportButton';
 import type { Hospital } from '@/lib/types';
 
 type SortKey = 'name' | 'rating' | 'distance';
@@ -9,6 +10,7 @@ type SortKey = 'name' | 'rating' | 'distance';
 interface ResultsListProps {
   hospitals: Hospital[];
   hasGeolocation?: boolean;
+  query?: string;
 }
 
 function sortHospitals(hospitals: Hospital[], key: SortKey): Hospital[] {
@@ -24,7 +26,7 @@ function sortHospitals(hospitals: Hospital[], key: SortKey): Hospital[] {
   });
 }
 
-export function ResultsList({ hospitals, hasGeolocation = false }: ResultsListProps) {
+export function ResultsList({ hospitals, hasGeolocation = false, query = '' }: ResultsListProps) {
   const [sortBy, setSortBy] = useState<SortKey>('name');
 
   const sorted = useMemo(() => sortHospitals(hospitals, sortBy), [hospitals, sortBy]);
@@ -45,29 +47,33 @@ export function ResultsList({ hospitals, hasGeolocation = false }: ResultsListPr
           {hospitals.length} hospital{hospitals.length !== 1 ? 's' : ''} found
         </p>
 
-        <div className="flex items-center gap-2">
-          <label htmlFor="sort-select" className="text-sm text-gray-500">
-            Sort by:
-          </label>
-          <select
-            id="sort-select"
-            value={sortBy}
-            onChange={(e) => setSortBy(e.target.value as SortKey)}
-            className="text-sm border border-gray-300 rounded-lg px-3 py-1.5 focus:outline-none focus:ring-2 focus:ring-emerald-500"
-            aria-label="Sort results"
-          >
-            <option value="name">Name (A–Z)</option>
-            <option value="rating">Rating (highest first)</option>
-            <option value="distance" disabled={!hasGeolocation}>
-              Distance {!hasGeolocation ? '(enable location)' : '(nearest first)'}
-            </option>
-          </select>
+        <div className="flex items-center gap-3">
+          <ExportButton hospitals={hospitals} query={query} />
+
+          <div className="flex items-center gap-2">
+            <label htmlFor="sort-select" className="text-sm text-gray-500">
+              Sort:
+            </label>
+            <select
+              id="sort-select"
+              value={sortBy}
+              onChange={(e) => setSortBy(e.target.value as SortKey)}
+              className="text-sm border border-gray-300 rounded-lg px-3 py-1.5 focus:outline-none focus:ring-2 focus:ring-emerald-500"
+              aria-label="Sort results"
+            >
+              <option value="name">Name (A–Z)</option>
+              <option value="rating">Rating (highest first)</option>
+              <option value="distance" disabled={!hasGeolocation}>
+                Distance {!hasGeolocation ? '(enable location)' : '(nearest first)'}
+              </option>
+            </select>
+          </div>
         </div>
       </div>
 
       <ul className="space-y-3" role="list" aria-label="Hospital results">
         {sorted.map((hospital) => (
-          <li key={hospital.id}>
+          <li key={hospital.id} id={`hospital-${hospital.id}`}>
             <HospitalCard
               hospital={hospital}
               distance={hospital.distance_km ?? null}

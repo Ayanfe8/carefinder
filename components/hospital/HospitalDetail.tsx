@@ -5,6 +5,12 @@ import { useMemo } from 'react';
 import { sanitizeMarkdown } from '@/lib/sanitize';
 import type { Hospital, Review, HospitalImage } from '@/lib/types';
 
+interface HospitalDetailProps {
+  hospital: Hospital;
+  images?: HospitalImage[];
+  reviews?: Review[];
+}
+
 function StarRating({ value, count }: { value: number; count: number }) {
   const filled = Math.round(value);
   return (
@@ -77,7 +83,7 @@ export function HospitalDetail({ hospital, images = [], reviews = [] }: Hospital
         </div>
 
         <div className="mt-4 flex flex-wrap gap-2">
-          {hospital.specialties.map((s) => (
+          {hospital.specialties.map((s: string) => (
             <span
               key={s}
               className="text-sm bg-emerald-50 text-emerald-700 px-3 py-1 rounded-full capitalize"
@@ -96,7 +102,7 @@ export function HospitalDetail({ hospital, images = [], reviews = [] }: Hospital
       {images.length > 0 && supabaseStorageBase && (
         <section aria-label="Hospital photos">
           <div className="grid grid-cols-2 md:grid-cols-3 gap-3">
-            {images.map((img) => (
+            {images.map((img: HospitalImage) => (
               <div key={img.id} className="relative aspect-video rounded-lg overflow-hidden bg-gray-100">
                 <Image
                   src={`${supabaseStorageBase}/${img.storage_path}`}
@@ -163,7 +169,7 @@ export function HospitalDetail({ hospital, images = [], reviews = [] }: Hospital
           <p className="text-sm text-gray-500">No reviews yet. Be the first to rate this hospital.</p>
         ) : (
           <div className="space-y-4">
-            {reviews.map((r) => (
+            {reviews.map((r: Review) => (
               <ReviewCard key={r.id} review={r} />
             ))}
           </div>

@@ -113,7 +113,7 @@ export default async function SearchPage({ searchParams }: SearchPageProps) {
               </div>
             }
           >
-            <ResultsList hospitals={hospitals} hasGeolocation={hasGeolocation} />
+            <ResultsList hospitals={hospitals} hasGeolocation={hasGeolocation} query={query} />
           </Suspense>
         </div>
       </div>

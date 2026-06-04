@@ -43,12 +43,16 @@ describe('SearchBar', () => {
     expect(input).toHaveValue('Kano');
   });
 
-  it('calls router.push when the form is submitted', async () => {
+  it('calls router.push when the form is submitted', () => {
+    vi.useFakeTimers();
     render(<SearchBar />);
     const input = screen.getByRole('searchbox');
-    await userEvent.type(input, 'Lagos');
+    // fireEvent.change avoids userEvent async internals conflicting with fake timers
+    fireEvent.change(input, { target: { value: 'Lagos' } });
     fireEvent.submit(screen.getByRole('search'));
+    // handleSubmit clears the debounce and calls navigate exactly once
     expect(mockPush).toHaveBeenCalledOnce();
+    vi.useRealTimers();
   });
 
   it('includes the trimmed query in the push URL', async () => {
