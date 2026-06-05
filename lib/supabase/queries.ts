@@ -129,6 +129,47 @@ export async function submitReview(
   return data as unknown as Review
 }
 
+// ─── Admin queries ────────────────────────────────────────────────────────────
+
+/**
+ * List all hospitals for the admin dashboard (all statuses, paginated).
+ * Returns total count for pagination UI.
+ */
+export async function getAdminHospitals(
+  supabase: SupabaseClient,
+  pagination: Pagination
+): Promise<{ hospitals: Hospital[]; total: number }> {
+  const { data, error, count } = await supabase
+    .from('hospitals')
+    .select(HOSPITAL_COLS, { count: 'exact' })
+    .order('created_at', { ascending: false })
+    .range(
+      (pagination.page - 1) * pagination.pageSize,
+      pagination.page * pagination.pageSize - 1
+    )
+
+  if (error) throw error
+  return { hospitals: (data ?? []) as Hospital[], total: count ?? 0 }
+}
+
+/**
+ * Fetch a single hospital by ID for admin editing — no status filter.
+ * Returns null when not found.
+ */
+export async function getHospitalByIdAdmin(
+  supabase: SupabaseClient,
+  id: string
+): Promise<Hospital | null> {
+  const { data, error } = await supabase
+    .from('hospitals')
+    .select(HOSPITAL_COLS)
+    .eq('id', id)
+    .maybeSingle()
+
+  if (error) throw error
+  return data as unknown as Hospital | null
+}
+
 // ─── Admin mutations ──────────────────────────────────────────────────────────
 // These require either:
 //   - A cookie-based client with a JWT that has role = 'admin' (RLS enforced), or
