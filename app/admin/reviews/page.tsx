@@ -15,12 +15,7 @@ export default async function AdminReviewsPage({ searchParams }: Props) {
 
   const { data, error, count } = await supabase
     .from('reviews')
-    .select(
-      `id, hospital_id, user_id, rating, text, status, created_at,
-       hospitals ( name ),
-       users ( email )`,
-      { count: 'exact' }
-    )
+    .select('*, hospitals ( name )', { count: 'exact' })
     .order('created_at', { ascending: false })
     .range((page - 1) * PAGE_SIZE, page * PAGE_SIZE - 1);
 

@@ -9,7 +9,6 @@ export type ReviewWithRelations = {
   status: 'approved' | 'hidden' | 'pending';
   created_at: string;
   hospitals: { name: string } | null;
-  users: { email: string } | null;
 };
 
 interface Props {
@@ -24,7 +23,7 @@ const STATUS_STYLES: Record<ReviewWithRelations['status'], string> = {
 
 export function ReviewModerationRow({ review }: Props) {
   const hospitalName = review.hospitals?.name ?? 'Unknown hospital';
-  const reviewerEmail = review.users?.email ?? 'Anonymous';
+  const reviewerId = review.user_id ? review.user_id.slice(0, 8) + '…' : 'Anonymous';
   const date = new Date(review.created_at).toLocaleDateString('en-NG', {
     year: 'numeric',
     month: 'short',
@@ -36,8 +35,8 @@ export function ReviewModerationRow({ review }: Props) {
       <td className="px-4 py-3 font-medium text-gray-900 max-w-[160px] truncate">
         {hospitalName}
       </td>
-      <td className="px-4 py-3 text-gray-600 max-w-[180px] truncate" title={reviewerEmail}>
-        {reviewerEmail}
+      <td className="px-4 py-3 text-gray-600 max-w-[180px] truncate" title={review.user_id ?? undefined}>
+        {reviewerId}
         <span className="block text-xs text-gray-400">{date}</span>
       </td>
       <td className="px-4 py-3 text-gray-700 whitespace-nowrap">
