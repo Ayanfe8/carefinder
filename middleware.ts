@@ -48,16 +48,12 @@ export async function middleware(request: NextRequest) {
     return NextResponse.redirect(new URL('/admin/login', request.url));
   }
 
-  // Check the user's role from public.users.
-  // getUser() already validated the JWT, so querying by user.id is safe and
-  // always returns the current role (avoids getSession() Edge Runtime quirks).
-  const { data: userData } = await supabase
-    .from('users')
-    .select('role')
-    .eq('id', user.id)
-    .single();
+  // Read role directly from JWT claims injected by custom_access_token_hook
+  const role = (user.app_metadata?.role as string) ||
+             (user.user_metadata?.role as string) ||
+             null;
 
-  if (userData?.role !== 'admin') {
+  if (role !== 'admin') {
     return NextResponse.redirect(new URL('/admin/login', request.url));
   }
 
