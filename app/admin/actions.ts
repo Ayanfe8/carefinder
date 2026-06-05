@@ -5,6 +5,7 @@ import {
   createHospital,
   updateHospital,
   deleteHospital,
+  moderateReview,
 } from '@/lib/supabase/queries';
 import type { HospitalInput } from '@/lib/schemas';
 import { revalidatePath } from 'next/cache';
@@ -35,6 +36,16 @@ export async function updateHospitalAction(
   revalidatePath(`/hospitals/${id}`);
   revalidatePath('/admin/dashboard');
   return { id };
+}
+
+export async function moderateReviewAction(formData: FormData) {
+  const reviewId = formData.get('reviewId') as string;
+  const status = formData.get('status') as 'approved' | 'hidden';
+  if (!reviewId || !status) return;
+
+  const supabase = createServiceClient();
+  await moderateReview(supabase, reviewId, status);
+  revalidatePath('/admin/reviews');
 }
 
 export async function deleteHospitalAction(formData: FormData) {
