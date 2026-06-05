@@ -1,4 +1,5 @@
 import { createServerClient } from '@supabase/ssr';
+import { createClient } from '@supabase/supabase-js';
 import { NextResponse, type NextRequest } from 'next/server';
 
 export async function middleware(request: NextRequest) {
@@ -48,12 +49,19 @@ export async function middleware(request: NextRequest) {
     return NextResponse.redirect(new URL('/admin/login', request.url));
   }
 
-  // Read role directly from JWT claims injected by custom_access_token_hook
-  const role = (user.app_metadata?.role as string) ||
-             (user.user_metadata?.role as string) ||
-             null;
+  // Query public.users with service role key (bypasses RLS, reads the role column directly).
+  const adminClient = createClient(
+    process.env.NEXT_PUBLIC_SUPABASE_URL!,
+    process.env.SUPABASE_SERVICE_ROLE_KEY!
+  );
 
-  if (role !== 'admin') {
+  const { data: userData } = await adminClient
+    .from('users')
+    .select('role')
+    .eq('id', user.id)
+    .single();
+
+  if (userData?.role !== 'admin') {
     return NextResponse.redirect(new URL('/admin/login', request.url));
   }
 

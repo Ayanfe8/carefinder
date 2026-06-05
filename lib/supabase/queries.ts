@@ -149,7 +149,7 @@ export async function getAdminHospitals(
     )
 
   if (error) throw error
-  return { hospitals: (data ?? []) as Hospital[], total: count ?? 0 }
+  return { hospitals: (data ?? []) as unknown as Hospital[], total: count ?? 0 }
 }
 
 /**
