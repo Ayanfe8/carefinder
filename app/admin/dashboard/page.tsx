@@ -1,5 +1,5 @@
 import Link from 'next/link';
-import { createClient } from '@/lib/supabase/server';
+import { createServiceClient } from '@/lib/supabase/server';
 import { getAdminHospitals } from '@/lib/supabase/queries';
 import { deleteHospitalAction } from '@/app/admin/actions';
 import { AdminHeader } from '@/components/admin/AdminHeader';
@@ -13,7 +13,7 @@ interface Props {
 
 export default async function AdminDashboardPage({ searchParams }: Props) {
   const page = Math.max(1, parseInt(searchParams.page ?? '1', 10));
-  const supabase = createClient();
+  const supabase = createServiceClient();
   const { hospitals, total } = await getAdminHospitals(supabase, {
     page,
     pageSize: PAGE_SIZE,
