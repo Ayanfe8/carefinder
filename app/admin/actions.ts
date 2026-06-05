@@ -1,7 +1,12 @@
 'use server';
 
-import { createClient } from '@/lib/supabase/server';
-import { deleteHospital } from '@/lib/supabase/queries';
+import { createClient, createServiceClient } from '@/lib/supabase/server';
+import {
+  createHospital,
+  updateHospital,
+  deleteHospital,
+} from '@/lib/supabase/queries';
+import type { HospitalInput } from '@/lib/schemas';
 import { revalidatePath } from 'next/cache';
 import { redirect } from 'next/navigation';
 
@@ -11,14 +16,34 @@ export async function signOut() {
   redirect('/admin/login');
 }
 
+export async function createHospitalAction(
+  input: HospitalInput
+): Promise<{ id: string }> {
+  const supabase = createServiceClient();
+  const hospital = await createHospital(supabase, input);
+  revalidatePath(`/hospitals/${hospital.id}`);
+  revalidatePath('/admin/dashboard');
+  return { id: hospital.id };
+}
+
+export async function updateHospitalAction(
+  id: string,
+  input: HospitalInput
+): Promise<{ id: string }> {
+  const supabase = createServiceClient();
+  await updateHospital(supabase, id, input);
+  revalidatePath(`/hospitals/${id}`);
+  revalidatePath('/admin/dashboard');
+  return { id };
+}
+
 export async function deleteHospitalAction(formData: FormData) {
   const id = formData.get('id') as string;
   if (!id) return;
 
-  const supabase = createClient();
+  const supabase = createServiceClient();
   await deleteHospital(supabase, id);
 
-  // Bust the ISR cache for the deleted hospital's public detail page.
   revalidatePath(`/hospitals/${id}`);
   revalidatePath('/admin/dashboard');
   redirect('/admin/dashboard');
