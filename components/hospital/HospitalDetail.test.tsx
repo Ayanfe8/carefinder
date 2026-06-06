@@ -1,7 +1,16 @@
-import { describe, it, expect } from 'vitest';
+import { describe, it, expect, vi } from 'vitest';
 import { render, screen } from '@testing-library/react';
 import { HospitalDetail } from './HospitalDetail';
 import type { Hospital, Review } from '@/lib/types';
+
+// RatingWidget calls supabase.auth.getUser() on mount — mock it to prevent hang
+vi.mock('@/lib/supabase/client', () => ({
+  createClient: () => ({
+    auth: {
+      getUser: () => Promise.resolve({ data: { user: null }, error: null }),
+    },
+  }),
+}));
 
 const BASE_HOSPITAL: Hospital = {
   id: 'h-001',
@@ -73,8 +82,9 @@ describe('HospitalDetail', () => {
 
   it('renders aggregate rating and review count', () => {
     render(<HospitalDetail hospital={BASE_HOSPITAL} />);
-    expect(screen.getByText(/4\.5/)).toBeInTheDocument();
-    expect(screen.getByText(/32/)).toBeInTheDocument();
+    // 4.5 appears in both the header and RatingWidget — assert at least one exists
+    expect(screen.getAllByText(/4\.5/).length).toBeGreaterThan(0);
+    expect(screen.getAllByText(/32/).length).toBeGreaterThan(0);
   });
 
   it('renders Markdown description as HTML (bold preserved, script stripped)', () => {

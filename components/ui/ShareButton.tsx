@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useRef, useEffect } from 'react';
 import { useSearchParams } from 'next/navigation';
 import { encodeFilters, decodeFilters } from '@/lib/share';
 import type { Hospital } from '@/lib/types';
@@ -18,6 +18,30 @@ export function ShareButton({ hospitals }: ShareButtonProps) {
   const [selectedIds, setSelectedIds] = useState<string[]>([]);
   const [status, setStatus] = useState<'idle' | 'sending' | 'sent' | 'error' | 'ratelimit'>('idle');
   const [errorMsg, setErrorMsg] = useState('');
+
+  const emailTriggerRef = useRef<HTMLButtonElement>(null);
+  const firstInputRef = useRef<HTMLInputElement>(null);
+  const wasOpenedRef = useRef(false);
+
+  // Move focus into modal on open; return it to trigger on close.
+  useEffect(() => {
+    if (emailOpen) {
+      wasOpenedRef.current = true;
+      firstInputRef.current?.focus();
+    } else if (wasOpenedRef.current) {
+      emailTriggerRef.current?.focus();
+    }
+  }, [emailOpen]);
+
+  // Dismiss with Escape key.
+  useEffect(() => {
+    if (!emailOpen) return;
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') setEmailOpen(false);
+    };
+    window.addEventListener('keydown', onKey);
+    return () => window.removeEventListener('keydown', onKey);
+  }, [emailOpen]);
 
   const handleCopyLink = async () => {
     const filters = decodeFilters(new URLSearchParams(searchParams.toString()));
@@ -97,8 +121,11 @@ export function ShareButton({ hospitals }: ShareButtonProps) {
 
         {hospitals.length > 0 && (
           <button
+            ref={emailTriggerRef}
             type="button"
             onClick={handleEmailOpen}
+            aria-haspopup="dialog"
+            aria-expanded={emailOpen}
             className="text-sm text-gray-600 hover:text-emerald-600 border border-gray-300 hover:border-emerald-400 px-3 py-1.5 rounded-lg transition-colors"
             aria-label="Email this hospital list"
           >
@@ -111,8 +138,11 @@ export function ShareButton({ hospitals }: ShareButtonProps) {
         <div
           role="dialog"
           aria-modal="true"
-          aria-label="Email hospital list"
+          aria-labelledby="share-dialog-title"
           className="fixed inset-0 z-50 flex items-center justify-center bg-black/40"
+          onClick={(e) => {
+            if (e.target === e.currentTarget) setEmailOpen(false);
+          }}
         >
           <div className="bg-white rounded-xl shadow-xl p-6 w-[480px] max-w-full max-h-[90vh] overflow-y-auto">
             {status === 'sent' ? (
@@ -131,7 +161,9 @@ export function ShareButton({ hospitals }: ShareButtonProps) {
               </div>
             ) : (
               <form onSubmit={handleEmailSubmit}>
-                <h2 className="font-semibold text-gray-900 mb-4">Email this hospital list</h2>
+                <h2 id="share-dialog-title" className="font-semibold text-gray-900 mb-4">
+                  Email this hospital list
+                </h2>
 
                 <div className="space-y-3 mb-4">
                   <div>
@@ -142,6 +174,7 @@ export function ShareButton({ hospitals }: ShareButtonProps) {
                       </span>
                     </label>
                     <input
+                      ref={firstInputRef}
                       id="share-to"
                       type="email"
                       required

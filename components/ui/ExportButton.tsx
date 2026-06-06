@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useRef, useEffect } from 'react';
 import { exportHospitalsCSV, ALL_EXPORT_COLUMNS } from '@/lib/csv';
 import type { ExportColumn, CSVHospital } from '@/lib/csv';
 
@@ -27,6 +27,30 @@ export function ExportButton({ hospitals, query = '' }: ExportButtonProps) {
     'specialties',
   ]);
 
+  const triggerRef = useRef<HTMLButtonElement>(null);
+  const firstCheckboxRef = useRef<HTMLInputElement>(null);
+  const wasOpenedRef = useRef(false);
+
+  // Move focus into modal on open; return it to trigger on close.
+  useEffect(() => {
+    if (open) {
+      wasOpenedRef.current = true;
+      firstCheckboxRef.current?.focus();
+    } else if (wasOpenedRef.current) {
+      triggerRef.current?.focus();
+    }
+  }, [open]);
+
+  // Dismiss with Escape key.
+  useEffect(() => {
+    if (!open) return;
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') setOpen(false);
+    };
+    window.addEventListener('keydown', onKey);
+    return () => window.removeEventListener('keydown', onKey);
+  }, [open]);
+
   const toggleColumn = (col: ExportColumn) => {
     setSelected((prev) =>
       prev.includes(col) ? prev.filter((c) => c !== col) : [...prev, col]
@@ -41,8 +65,11 @@ export function ExportButton({ hospitals, query = '' }: ExportButtonProps) {
   return (
     <>
       <button
+        ref={triggerRef}
         type="button"
         onClick={() => setOpen(true)}
+        aria-haspopup="dialog"
+        aria-expanded={open}
         className="text-sm text-gray-600 hover:text-emerald-600 border border-gray-300 hover:border-emerald-400 px-3 py-1.5 rounded-lg transition-colors"
       >
         Export CSV
@@ -52,17 +79,23 @@ export function ExportButton({ hospitals, query = '' }: ExportButtonProps) {
         <div
           role="dialog"
           aria-modal="true"
-          aria-label="Export column selection"
+          aria-labelledby="export-dialog-title"
           className="fixed inset-0 z-50 flex items-center justify-center bg-black/40"
+          onClick={(e) => {
+            if (e.target === e.currentTarget) setOpen(false);
+          }}
         >
           <div className="bg-white rounded-xl shadow-xl p-6 w-80 max-w-full">
-            <h2 className="font-semibold text-gray-900 mb-4">Select columns to export</h2>
+            <h2 id="export-dialog-title" className="font-semibold text-gray-900 mb-4">
+              Select columns to export
+            </h2>
 
             <fieldset className="space-y-2 mb-6">
               <legend className="sr-only">CSV columns</legend>
-              {ALL_EXPORT_COLUMNS.map((col) => (
+              {ALL_EXPORT_COLUMNS.map((col, i) => (
                 <label key={col} className="flex items-center gap-3 cursor-pointer">
                   <input
+                    ref={i === 0 ? firstCheckboxRef : undefined}
                     type="checkbox"
                     checked={selected.includes(col)}
                     onChange={() => toggleColumn(col)}

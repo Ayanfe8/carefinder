@@ -65,6 +65,7 @@ export function FilterPanel() {
         <h2 className="text-sm font-semibold text-gray-700 uppercase tracking-wide">Filters</h2>
         {hasActiveFilters && (
           <button
+            type="button"
             onClick={clearAll}
             className="text-xs text-emerald-600 hover:text-emerald-700"
             aria-label="Clear all filters"
