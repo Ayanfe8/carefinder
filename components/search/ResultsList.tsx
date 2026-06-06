@@ -3,6 +3,7 @@
 import { useState, useMemo } from 'react';
 import { HospitalCard } from '@/components/hospital/HospitalCard';
 import { ExportButton } from '@/components/ui/ExportButton';
+import { ShareButton } from '@/components/ui/ShareButton';
 import type { Hospital } from '@/lib/types';
 
 type SortKey = 'name' | 'rating' | 'distance';
@@ -49,6 +50,7 @@ export function ResultsList({ hospitals, hasGeolocation = false, query = '' }: R
 
         <div className="flex items-center gap-3">
           <ExportButton hospitals={hospitals} query={query} />
+          <ShareButton hospitals={hospitals} />
 
           <div className="flex items-center gap-2">
             <label htmlFor="sort-select" className="text-sm text-gray-500">
