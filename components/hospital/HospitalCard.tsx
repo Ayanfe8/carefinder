@@ -1,4 +1,8 @@
+'use client';
+
 import Link from 'next/link';
+import { useState } from 'react';
+import { exportHospitalsCSV, ALL_EXPORT_COLUMNS } from '@/lib/csv';
 import type { Hospital } from '@/lib/types';
 
 interface HospitalCardProps {
@@ -24,6 +28,23 @@ function StarRating({ value }: { value: number }) {
 }
 
 export function HospitalCard({ hospital, distance, showActions = false }: HospitalCardProps) {
+  const [copied, setCopied] = useState(false);
+
+  const handleExport = () => {
+    exportHospitalsCSV([hospital], ALL_EXPORT_COLUMNS, hospital.name);
+  };
+
+  const handleShare = async () => {
+    const url = `${process.env.NEXT_PUBLIC_SITE_URL ?? window.location.origin}/hospitals/${hospital.id}`;
+    try {
+      await navigator.clipboard.writeText(url);
+      setCopied(true);
+      setTimeout(() => setCopied(false), 2000);
+    } catch {
+      window.prompt('Copy this link:', url);
+    }
+  };
+
   return (
     <article
       className="bg-white border border-gray-200 rounded-xl p-4 hover:shadow-md transition-shadow"
@@ -80,11 +101,21 @@ export function HospitalCard({ hospital, distance, showActions = false }: Hospit
 
       {showActions && (
         <div className="mt-3 pt-3 border-t border-gray-100 flex gap-3 text-sm">
-          <button className="text-gray-500 hover:text-emerald-600 transition-colors">
+          <button
+            type="button"
+            onClick={handleExport}
+            className="text-gray-500 hover:text-emerald-600 transition-colors"
+            aria-label={`Export ${hospital.name} as CSV`}
+          >
             Export
           </button>
-          <button className="text-gray-500 hover:text-emerald-600 transition-colors">
-            Share
+          <button
+            type="button"
+            onClick={handleShare}
+            className="text-gray-500 hover:text-emerald-600 transition-colors"
+            aria-label={copied ? 'Link copied' : `Copy link to ${hospital.name}`}
+          >
+            {copied ? 'Copied!' : 'Share'}
           </button>
         </div>
       )}

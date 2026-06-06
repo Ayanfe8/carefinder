@@ -3,6 +3,7 @@
 import Image from 'next/image';
 import { useMemo } from 'react';
 import { sanitizeMarkdown } from '@/lib/sanitize';
+import { RatingWidget } from '@/components/hospital/RatingWidget';
 import type { Hospital, Review, HospitalImage } from '@/lib/types';
 
 interface HospitalDetailProps {
@@ -30,17 +31,29 @@ function StarRating({ value, count }: { value: number; count: number }) {
 }
 
 function ReviewCard({ review }: { review: Review }) {
+  const reviewer = review.user_id ? `${review.user_id.slice(0, 8)}…` : 'Anonymous';
+  const stars = Array.from({ length: 5 }, (_, i) => (
+    <span key={i} className={i < review.rating ? 'text-yellow-400' : 'text-gray-300'} aria-hidden>
+      ★
+    </span>
+  ));
   return (
     <article className="border-b border-gray-100 pb-4">
-      <StarRating value={review.rating} count={1} />
-      {review.text && <p className="text-sm text-gray-700 mt-2">{review.text}</p>}
-      <p className="text-xs text-gray-400 mt-1">
-        {new Date(review.created_at).toLocaleDateString('en-NG', {
-          year: 'numeric',
-          month: 'short',
-          day: 'numeric',
-        })}
-      </p>
+      <div className="flex items-center gap-2 mb-1">
+        <span className="flex items-center" aria-label={`${review.rating} out of 5 stars`}>
+          {stars}
+        </span>
+        <span className="text-xs text-gray-400">{reviewer}</span>
+        <span className="text-xs text-gray-300">·</span>
+        <span className="text-xs text-gray-400">
+          {new Date(review.created_at).toLocaleDateString('en-NG', {
+            year: 'numeric',
+            month: 'short',
+            day: 'numeric',
+          })}
+        </span>
+      </div>
+      {review.text && <p className="text-sm text-gray-700 mt-1">{review.text}</p>}
     </article>
   );
 }
@@ -159,6 +172,13 @@ export function HospitalDetail({ hospital, images = [], reviews = [] }: Hospital
           />
         </section>
       )}
+
+      {/* Rating widget */}
+      <RatingWidget
+        hospitalId={hospital.id}
+        ratingAvg={hospital.rating_avg}
+        reviewCount={hospital.review_count}
+      />
 
       {/* Reviews */}
       <section aria-label="Reviews">
