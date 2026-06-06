@@ -3,8 +3,11 @@
 -- and PostGIS ST_DWithin radius in a single query.
 -- Returns all Hospital fields (no raw GEOGRAPHY column) plus distance_km.
 -- Called via supabase.rpc('search_hospitals', params).
+-- DROP first: cannot use CREATE OR REPLACE when the remote function has a
+-- different return type (e.g. the migration 009 version with lat/lng columns).
+DROP FUNCTION IF EXISTS public.search_hospitals CASCADE;
 
-CREATE OR REPLACE FUNCTION public.search_hospitals(
+CREATE FUNCTION public.search_hospitals(
   p_query        TEXT             DEFAULT NULL,
   p_specialties  TEXT[]           DEFAULT NULL,
   p_ownership    TEXT             DEFAULT NULL,
