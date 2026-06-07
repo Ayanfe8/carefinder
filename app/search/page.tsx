@@ -4,7 +4,9 @@ import { searchHospitals } from '@/lib/supabase/queries';
 import { SearchBar } from '@/components/search/SearchBar';
 import { FilterPanel } from '@/components/search/FilterPanel';
 import { ResultsList } from '@/components/search/ResultsList';
+import { ResultsListSkeleton } from '@/components/search/ResultsListSkeleton';
 import { MapToggle } from '@/components/search/MapToggle';
+import { ErrorBoundary } from '@/components/ui/ErrorBoundary';
 import type { SearchFilters, Pagination } from '@/lib/types';
 import type { Metadata } from 'next';
 
@@ -104,17 +106,11 @@ export default async function SearchPage({ searchParams }: SearchPageProps) {
             radiusKm={filters.radius}
           />
 
-          <Suspense
-            fallback={
-              <div className="space-y-3">
-                {Array.from({ length: 5 }, (_, i) => (
-                  <div key={i} className="bg-gray-100 rounded-xl h-28 animate-pulse" />
-                ))}
-              </div>
-            }
-          >
-            <ResultsList hospitals={hospitals} hasGeolocation={hasGeolocation} query={query} />
-          </Suspense>
+          <ErrorBoundary>
+            <Suspense fallback={<ResultsListSkeleton />}>
+              <ResultsList hospitals={hospitals} hasGeolocation={hasGeolocation} query={query} />
+            </Suspense>
+          </ErrorBoundary>
         </div>
       </div>
     </div>

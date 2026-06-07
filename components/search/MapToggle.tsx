@@ -2,6 +2,7 @@
 
 import dynamic from 'next/dynamic';
 import { useState, useCallback } from 'react';
+import { ErrorBoundary } from '@/components/ui/ErrorBoundary';
 import type { Hospital } from '@/lib/types';
 
 // Lazy-load HospitalMap — Mapbox GL JS uses browser APIs unavailable on the server.
@@ -61,12 +62,20 @@ export function MapToggle({ hospitals, userLocation, radiusKm }: MapToggleProps)
       {/* Map view — only mounts when toggled */}
       {view === 'map' && (
         <div className="h-[520px] mb-6">
-          <HospitalMap
-            hospitals={hospitals}
-            userLocation={userLocation}
-            radiusKm={radiusKm}
-            onMarkerClick={handleMarkerClick}
-          />
+          <ErrorBoundary
+            fallback={
+              <div role="alert" className="w-full h-full flex items-center justify-center rounded-xl border border-red-200 bg-red-50">
+                <p className="text-sm text-red-600">Map failed to load. Check your connection and try again.</p>
+              </div>
+            }
+          >
+            <HospitalMap
+              hospitals={hospitals}
+              userLocation={userLocation}
+              radiusKm={radiusKm}
+              onMarkerClick={handleMarkerClick}
+            />
+          </ErrorBoundary>
         </div>
       )}
 

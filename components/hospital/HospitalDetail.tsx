@@ -1,7 +1,7 @@
 'use client';
 
 import Image from 'next/image';
-import { useMemo } from 'react';
+import { useMemo, useState } from 'react';
 import { sanitizeMarkdown } from '@/lib/sanitize';
 import { RatingWidget } from '@/components/hospital/RatingWidget';
 import type { Hospital, Review, HospitalImage } from '@/lib/types';
@@ -55,6 +55,24 @@ function ReviewCard({ review }: { review: Review }) {
       </div>
       {review.text && <p className="text-sm text-gray-700 mt-1">{review.text}</p>}
     </article>
+  );
+}
+
+function ImageWithSkeleton({ src, alt }: { src: string; alt: string }) {
+  const [loaded, setLoaded] = useState(false);
+  return (
+    <>
+      {!loaded && <div className="absolute inset-0 bg-gray-200 animate-pulse" />}
+      <Image
+        src={src}
+        alt={alt}
+        fill
+        sizes="(max-width: 768px) 50vw, 33vw"
+        className="object-cover"
+        loading="lazy"
+        onLoad={() => setLoaded(true)}
+      />
+    </>
   );
 }
 
@@ -117,12 +135,9 @@ export function HospitalDetail({ hospital, images = [], reviews = [] }: Hospital
           <div className="grid grid-cols-2 md:grid-cols-3 gap-3">
             {images.map((img: HospitalImage) => (
               <div key={img.id} className="relative aspect-video rounded-lg overflow-hidden bg-gray-100">
-                <Image
+                <ImageWithSkeleton
                   src={`${supabaseStorageBase}/${img.storage_path}`}
                   alt={`Photo of ${hospital.name}`}
-                  fill
-                  sizes="(max-width: 768px) 50vw, 33vw"
-                  className="object-cover"
                 />
               </div>
             ))}

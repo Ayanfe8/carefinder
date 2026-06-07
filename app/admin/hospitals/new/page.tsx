@@ -1,5 +1,6 @@
 import { AdminHeader } from '@/components/admin/AdminHeader';
 import { AdminEntryForm } from '@/components/admin/AdminEntryForm';
+import { ErrorBoundary } from '@/components/ui/ErrorBoundary';
 
 export default function NewHospitalPage() {
   return (
@@ -7,7 +8,9 @@ export default function NewHospitalPage() {
       <AdminHeader />
       <main className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         <h1 className="text-2xl font-bold text-gray-900 mb-8">Add New Hospital</h1>
-        <AdminEntryForm />
+        <ErrorBoundary>
+          <AdminEntryForm />
+        </ErrorBoundary>
       </main>
     </div>
   );
