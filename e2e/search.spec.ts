@@ -55,6 +55,28 @@ test('E2E-02: export CSV with 3 selected columns and correct filename', async ({
   expect(download.suggestedFilename()).toMatch(/^hospitals-lagos-\d{4}-\d{2}-\d{2}\.csv$/);
 });
 
+// E2E-05: Hospital detail page — click a result card and verify the detail page loads
+test('E2E-05: clicking a hospital link navigates to the detail page', async ({ page }) => {
+  await page.goto('/search?q=Lagos');
+
+  // Wait for results list
+  const resultsList = page.getByRole('list', { name: /hospital results/i });
+  await expect(resultsList).toBeVisible();
+
+  // Grab the first hospital link text and href
+  const firstLink = resultsList.getByRole('link').first();
+  const hospitalName = (await firstLink.textContent())?.trim() ?? '';
+  await firstLink.click();
+
+  // Should land on /hospitals/<uuid>
+  await expect(page).toHaveURL(/\/hospitals\//);
+
+  // The h1 heading should match the hospital name we clicked
+  await expect(
+    page.getByRole('heading', { level: 1, name: new RegExp(hospitalName, 'i') })
+  ).toBeVisible();
+});
+
 // E2E-06: Geolocation denied → text search still works without error
 test('E2E-06: deny geolocation → text search returns results without error', async ({
   browser,
