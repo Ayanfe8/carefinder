@@ -345,7 +345,7 @@ describe.skipIf(!runIntegration)(
         expect(h.distance_km).toBeDefined();
         expect(h.distance_km!).toBeLessThanOrEqual(20);
       });
-    });
+    }, 15000);
 
     it('returns no results for a 1 km radius in an uninhabited area', async () => {
       // Coordinates in the middle of the Atlantic Ocean — well outside Nigeria
@@ -370,7 +370,7 @@ describe.skipIf(!runIntegration)(
       results.forEach((h) => {
         expect(h.specialties).toContain('maternity');
       });
-    });
+    }, 15000);
 
     it('filters by ownership — public only', async () => {
       const results = await searchHospitals(

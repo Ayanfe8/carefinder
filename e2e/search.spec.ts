@@ -31,7 +31,7 @@ test('E2E-02: export CSV with 3 selected columns and correct filename', async ({
   await page.getByRole('button', { name: /export csv/i }).click();
 
   // Column selection modal should open
-  const dialog = page.getByRole('dialog', { name: /export column selection/i });
+  const dialog = page.getByRole('dialog', { name: /select columns to export/i });
   await expect(dialog).toBeVisible();
 
   // Uncheck all columns first, then select exactly 3: Name, Phone, Rating
@@ -71,9 +71,10 @@ test('E2E-05: clicking a hospital link navigates to the detail page', async ({ p
   // Should land on /hospitals/<uuid>
   await expect(page).toHaveURL(/\/hospitals\//);
 
-  // The h1 heading should match the hospital name we clicked
+  // The page header h1 should match the hospital name we clicked.
+  // Use first() because description_md may also contain an h1 in its rendered HTML.
   await expect(
-    page.getByRole('heading', { level: 1, name: new RegExp(hospitalName, 'i') })
+    page.getByRole('heading', { level: 1, name: new RegExp(hospitalName, 'i') }).first()
   ).toBeVisible();
 });
 

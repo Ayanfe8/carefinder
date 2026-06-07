@@ -95,6 +95,60 @@ describe('exportHospitalsCSV — column selection', () => {
   });
 });
 
+// ─── 500-row stress test ─────────────────────────────────────────────────────
+
+describe('exportHospitalsCSV — 500-row stress test', () => {
+  let unparseSpy: ReturnType<typeof vi.spyOn>;
+
+  beforeEach(() => {
+    setupDomMocks();
+    unparseSpy = vi.spyOn(Papa, 'unparse');
+  });
+
+  afterEach(() => {
+    vi.restoreAllMocks();
+  });
+
+  function makeHospitals(count: number): CSVHospital[] {
+    return Array.from({ length: count }, (_, i) => ({
+      name: `Hospital ${i + 1}`,
+      address: `${i + 1} Test Street, Lagos Island`,
+      phone: `+234800${String(i).padStart(7, '0')}`,
+      email: i % 2 === 0 ? `h${i}@test.ng` : null,
+      specialties: ['general', 'emergency'],
+      rating_avg: +(4 + (i % 10) * 0.1).toFixed(1),
+    }));
+  }
+
+  it('passes all 500 rows to PapaParse — no truncation', () => {
+    exportHospitalsCSV(makeHospitals(500), ['name', 'address', 'phone', 'email', 'specialties', 'rating'], 'stress');
+    const rows = unparseSpy.mock.calls[0]?.[0] as Record<string, string>[];
+    expect(rows).toHaveLength(500);
+  });
+
+  it('first and last row contain expected hospital names', () => {
+    exportHospitalsCSV(makeHospitals(500), ['name'], 'stress');
+    const rows = unparseSpy.mock.calls[0]?.[0] as Record<string, string>[];
+    expect(rows[0]!['Name']).toBe('Hospital 1');
+    expect(rows[499]!['Name']).toBe('Hospital 500');
+  });
+
+  it('all 500 rows have the correct 6 columns', () => {
+    exportHospitalsCSV(makeHospitals(500), ['name', 'address', 'phone', 'email', 'specialties', 'rating'], 'stress');
+    const rows = unparseSpy.mock.calls[0]?.[0] as Record<string, string>[];
+    const expectedKeys = ['Name', 'Address', 'Phone', 'Email', 'Specialties', 'Rating'];
+    rows.forEach((row, i) => {
+      expect(Object.keys(row), `row ${i} missing columns`).toEqual(expectedKeys);
+    });
+  });
+
+  it('generates correct filename slug for stress query', () => {
+    const anchor = setupDomMocks();
+    exportHospitalsCSV(makeHospitals(500), ['name'], 'stress test');
+    expect(anchor.download).toMatch(/^hospitals-stress-test-\d{4}-\d{2}-\d{2}\.csv$/);
+  });
+});
+
 // ─── Filename format ─────────────────────────────────────────────────────────
 
 describe('buildCSVFilename — filename format', () => {
