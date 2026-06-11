@@ -60,11 +60,11 @@ export function SearchBar({ defaultValue = '' }: SearchBarProps) {
         onChange={handleChange}
         placeholder="Search by name, city, or LGA…"
         aria-label="Search hospitals by name, city, or LGA"
-        className="flex-1 rounded-lg border border-gray-300 px-4 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-transparent"
+        className="flex-1 rounded-lg border border-slate-300 px-4 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
       />
       <button
         type="submit"
-        className="bg-emerald-600 hover:bg-emerald-700 text-white text-sm font-medium px-5 py-2 rounded-lg transition-colors"
+        className="bg-blue-700 hover:bg-blue-800 text-white text-sm font-semibold px-5 py-2 rounded-lg transition-colors duration-150"
       >
         Search
       </button>

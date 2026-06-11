@@ -69,13 +69,13 @@ export default function HomePage() {
   return (
     <>
       {/* Hero Section */}
-      <section className="bg-gradient-to-br from-green-600 via-green-500 to-green-700 text-white py-20 px-4">
+      <section className="bg-gradient-to-br from-blue-900 via-blue-800 to-blue-700 text-white py-20 px-4">
         <div className="max-w-3xl mx-auto text-center">
           <div className="inline-block bg-white/20 backdrop-blur-sm px-4 py-2 rounded-full mb-6">
             <span className="text-sm font-semibold">Nigeria&apos;s Civic Hospital Directory</span>
           </div>
           <h1 className="text-5xl font-bold mb-4">Find the Right Hospital, Right Now</h1>
-          <p className="text-lg text-green-50 mb-12">
+          <p className="text-lg text-blue-50 mb-12">
             Search, filter, and share information about hospitals across Nigeria. Free and verified.
           </p>
 
@@ -97,12 +97,12 @@ export default function HomePage() {
                 onChange={(e) => setQuery(e.target.value)}
                 placeholder="Search by name, city, or LGA…"
                 aria-label="Search hospitals"
-                className="flex-1 rounded-full border-0 px-6 py-4 text-base text-gray-900 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-green-300"
+                className="flex-1 rounded-full border-0 px-6 py-4 text-base text-gray-900 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-300"
               />
               <button
                 type="button"
                 onClick={handleSearch}
-                className="bg-white text-green-600 hover:bg-green-50 font-semibold px-8 py-4 rounded-full transition-colors"
+                className="bg-white text-blue-700 hover:bg-blue-50 font-semibold px-8 py-4 rounded-full transition-colors"
               >
                 Search
               </button>
@@ -114,7 +114,7 @@ export default function HomePage() {
                 <button
                   type="button"
                   onClick={requestGeolocation}
-                  className="text-white hover:text-green-50 underline underline-offset-2 flex items-center justify-center gap-2 mx-auto"
+                  className="text-white hover:text-blue-50 underline underline-offset-2 flex items-center justify-center gap-2 mx-auto"
                 >
                   <Navigation className="w-4 h-4" />
                   Hospitals near me
@@ -157,19 +157,19 @@ export default function HomePage() {
           <div className="mt-16 grid grid-cols-2 md:grid-cols-4 gap-6 text-center pt-8 border-t border-white/20">
             <div>
               <div className="text-3xl font-bold">21+</div>
-              <div className="text-sm text-green-100 mt-1">Hospitals Listed</div>
+              <div className="text-sm text-blue-100 mt-1">Hospitals Listed</div>
             </div>
             <div>
               <div className="text-3xl font-bold">5</div>
-              <div className="text-sm text-green-100 mt-1">Major Cities</div>
+              <div className="text-sm text-blue-100 mt-1">Major Cities</div>
             </div>
             <div>
               <div className="text-3xl font-bold">10+</div>
-              <div className="text-sm text-green-100 mt-1">Specialties</div>
+              <div className="text-sm text-blue-100 mt-1">Specialties</div>
             </div>
             <div>
               <div className="text-3xl font-bold">100%</div>
-              <div className="text-sm text-green-100 mt-1">Free to Use</div>
+              <div className="text-sm text-blue-100 mt-1">Free to Use</div>
             </div>
           </div>
         </div>
@@ -179,10 +179,10 @@ export default function HomePage() {
       <section className="py-20 px-4 bg-white">
         <div className="max-w-6xl mx-auto">
           <div className="text-center mb-16">
-            <h2 className="text-4xl font-bold text-gray-900 mb-4">
+            <h2 className="text-4xl font-bold text-slate-900 mb-4">
               Everything you need to find care
             </h2>
-            <p className="text-lg text-gray-600">
+            <p className="text-lg text-slate-600">
               Comprehensive hospital information at your fingertips
             </p>
           </div>
@@ -193,13 +193,13 @@ export default function HomePage() {
               return (
                 <div
                   key={feature.label}
-                  className="border border-gray-200 rounded-lg p-6 hover:shadow-lg transition-shadow"
+                  className="border border-slate-200 rounded-lg p-6 hover:shadow-lg transition-shadow"
                 >
-                  <div className="w-12 h-12 bg-green-100 rounded-lg flex items-center justify-center mb-4">
-                    <Icon className="w-6 h-6 text-green-600" />
+                  <div className="w-12 h-12 bg-blue-100 rounded-lg flex items-center justify-center mb-4">
+                    <Icon className="w-6 h-6 text-blue-700" />
                   </div>
-                  <h3 className="font-semibold text-gray-900 mb-2">{feature.label}</h3>
-                  <p className="text-sm text-gray-600">{feature.description}</p>
+                  <h3 className="font-semibold text-slate-900 mb-2">{feature.label}</h3>
+                  <p className="text-sm text-slate-600">{feature.description}</p>
                 </div>
               );
             })}
@@ -208,11 +208,11 @@ export default function HomePage() {
       </section>
 
       {/* How It Works */}
-      <section className="py-20 px-4 bg-gray-50">
+      <section className="py-20 px-4 bg-slate-50">
         <div className="max-w-6xl mx-auto">
           <div className="text-center mb-16">
-            <h2 className="text-4xl font-bold text-gray-900 mb-4">How it works</h2>
-            <p className="text-lg text-gray-600">Get hospital information in three simple steps</p>
+            <h2 className="text-4xl font-bold text-slate-900 mb-4">How it works</h2>
+            <p className="text-lg text-slate-600">Get hospital information in three simple steps</p>
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
@@ -222,9 +222,9 @@ export default function HomePage() {
               { number: '03', title: 'Export & Share', desc: 'Download as CSV or share results with others' },
             ].map((step) => (
               <div key={step.number} className="text-center">
-                <div className="text-5xl font-bold text-green-600 mb-4">{step.number}</div>
-                <h3 className="text-xl font-semibold text-gray-900 mb-2">{step.title}</h3>
-                <p className="text-gray-600">{step.desc}</p>
+                <div className="text-5xl font-bold text-blue-700 mb-4">{step.number}</div>
+                <h3 className="text-xl font-semibold text-slate-900 mb-2">{step.title}</h3>
+                <p className="text-slate-600">{step.desc}</p>
               </div>
             ))}
           </div>
@@ -234,13 +234,13 @@ export default function HomePage() {
       {/* CTA Section */}
       <section className="py-20 px-4 bg-white">
         <div className="max-w-2xl mx-auto text-center">
-          <h2 className="text-4xl font-bold text-gray-900 mb-6">Ready to find a hospital?</h2>
-          <p className="text-lg text-gray-600 mb-8">
+          <h2 className="text-4xl font-bold text-slate-900 mb-6">Ready to find a hospital?</h2>
+          <p className="text-lg text-slate-600 mb-8">
             Start searching hospitals across Nigeria right now
           </p>
           <Link
             href="/search"
-            className="inline-block bg-green-600 hover:bg-green-700 text-white font-semibold px-8 py-4 rounded-lg transition-colors text-lg"
+            className="inline-block bg-blue-700 hover:bg-blue-800 text-white font-semibold px-8 py-4 rounded-lg transition-colors duration-150 text-lg"
           >
             Browse All Hospitals →
           </Link>

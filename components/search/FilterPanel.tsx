@@ -60,14 +60,14 @@ export function FilterPanel() {
   const hasActiveFilters = activeSpecialties.length > 0 || activeOwnership;
 
   return (
-    <aside aria-label="Search filters" className="space-y-6">
+    <aside aria-label="Search filters" className="bg-white border border-slate-200 rounded-xl p-4 shadow-sm space-y-6">
       <div className="flex items-center justify-between">
-        <h2 className="text-sm font-semibold text-gray-700 uppercase tracking-wide">Filters</h2>
+        <h2 className="text-sm font-semibold text-slate-700 uppercase tracking-wide">Filters</h2>
         {hasActiveFilters && (
           <button
             type="button"
             onClick={clearAll}
-            className="text-xs text-emerald-600 hover:text-emerald-700"
+            className="text-xs text-blue-700 hover:text-blue-800 font-medium"
             aria-label="Clear all filters"
           >
             Clear all
@@ -77,7 +77,7 @@ export function FilterPanel() {
 
       {/* Specialty */}
       <fieldset>
-        <legend className="text-sm font-medium text-gray-700 mb-2">Specialty</legend>
+        <legend className="text-sm font-medium text-slate-700 mb-2">Specialty</legend>
         <div className="space-y-1.5">
           {SPECIALTIES.map(({ value, label }) => (
             <label key={value} className="flex items-center gap-2 cursor-pointer">
@@ -86,9 +86,9 @@ export function FilterPanel() {
                 checked={activeSpecialties.includes(value)}
                 onChange={() => toggleSpecialty(value)}
                 aria-label={`Filter by ${label}`}
-                className="rounded border-gray-300 text-emerald-600 focus:ring-emerald-500"
+                className="rounded border-slate-300 text-blue-700 focus:ring-blue-500"
               />
-              <span className="text-sm text-gray-600">{label}</span>
+              <span className="text-sm text-slate-600">{label}</span>
             </label>
           ))}
         </div>
@@ -96,7 +96,7 @@ export function FilterPanel() {
 
       {/* Ownership */}
       <fieldset>
-        <legend className="text-sm font-medium text-gray-700 mb-2">Ownership</legend>
+        <legend className="text-sm font-medium text-slate-700 mb-2">Ownership</legend>
         <div className="space-y-1.5">
           {[
             { value: '', label: 'All' },
@@ -110,9 +110,9 @@ export function FilterPanel() {
                 checked={activeOwnership === value}
                 onChange={() => setOwnership(value)}
                 aria-label={`${label} hospitals`}
-                className="border-gray-300 text-emerald-600 focus:ring-emerald-500"
+                className="border-slate-300 text-blue-700 focus:ring-blue-500"
               />
-              <span className="text-sm text-gray-600">{label}</span>
+              <span className="text-sm text-slate-600">{label}</span>
             </label>
           ))}
         </div>

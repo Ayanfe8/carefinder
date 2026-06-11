@@ -8,10 +8,13 @@ export function AdminHeader() {
       {/* Logo */}
       <div className="p-6 border-b border-slate-800">
         <Link href="/admin/dashboard" className="flex items-center gap-2 hover:opacity-80 transition-opacity">
-          <div className="w-8 h-8 bg-green-600 rounded-lg flex items-center justify-center">
+          <div className="w-8 h-8 bg-blue-700 rounded-lg flex items-center justify-center">
             <span className="text-white font-bold text-sm">CF</span>
           </div>
-          <span className="font-bold text-white">Carefinder</span>
+          <div className="flex flex-col">
+            <span className="font-bold text-white text-sm leading-none">Carefinder</span>
+            <span className="text-xs text-slate-400">Admin</span>
+          </div>
         </Link>
       </div>
 
