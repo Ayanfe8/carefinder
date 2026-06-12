@@ -9,7 +9,7 @@ import type { Hospital } from '@/lib/types';
 // The map only initialises when the user explicitly toggles to map view (free-tier protection).
 const HospitalMap = dynamic(
   () => import('@/components/map/HospitalMap').then((m) => m.HospitalMap),
-  { ssr: false, loading: () => <div className="w-full h-full bg-slate-100 animate-pulse rounded-xl" /> }
+  { ssr: false, loading: () => <div className="w-full h-full bg-gray-100 animate-pulse rounded-xl" /> }
 );
 
 interface MapToggleProps {
@@ -33,7 +33,7 @@ export function MapToggle({ hospitals, userLocation, radiusKm }: MapToggleProps)
     <div>
       {/* Toggle buttons */}
       <div
-        className="inline-flex rounded-lg border border-slate-200 mb-4 overflow-hidden"
+        className="inline-flex rounded-lg border border-gray-200 mb-4 overflow-hidden"
         role="group"
         aria-label="Switch between list and map view"
       >
@@ -41,8 +41,8 @@ export function MapToggle({ hospitals, userLocation, radiusKm }: MapToggleProps)
           type="button"
           onClick={() => setView('list')}
           aria-pressed={view === 'list'}
-          className={`px-4 py-1.5 text-sm font-medium transition-colors duration-150 ${
-            view === 'list' ? 'bg-blue-700 text-white' : 'bg-white text-slate-600 hover:bg-slate-50'
+          className={`px-4 py-1.5 text-sm font-medium transition-colors ${
+            view === 'list' ? 'bg-emerald-600 text-white' : 'bg-white text-gray-600 hover:bg-gray-50'
           }`}
         >
           List
@@ -51,8 +51,8 @@ export function MapToggle({ hospitals, userLocation, radiusKm }: MapToggleProps)
           type="button"
           onClick={() => setView('map')}
           aria-pressed={view === 'map'}
-          className={`px-4 py-1.5 text-sm font-medium transition-colors duration-150 ${
-            view === 'map' ? 'bg-blue-700 text-white' : 'bg-white text-slate-600 hover:bg-slate-50'
+          className={`px-4 py-1.5 text-sm font-medium transition-colors ${
+            view === 'map' ? 'bg-emerald-600 text-white' : 'bg-white text-gray-600 hover:bg-gray-50'
           }`}
         >
           Map
@@ -81,7 +81,7 @@ export function MapToggle({ hospitals, userLocation, radiusKm }: MapToggleProps)
 
       {/* Selected hospital highlight */}
       {selectedId && view === 'map' && (
-        <div className="mb-4 p-3 bg-blue-50 border border-blue-200 rounded-lg text-sm text-blue-700">
+        <div className="mb-4 p-3 bg-emerald-50 border border-emerald-200 rounded-lg text-sm text-emerald-700">
           <a href={`/hospitals/${selectedId}`} className="font-medium hover:underline">
             View hospital details →
           </a>
