@@ -205,15 +205,16 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* Footer section */}
-      <section className="px-4 py-12 sm:py-16 bg-gray-50 border-t border-gray-200">
-        <div className="max-w-5xl mx-auto text-center text-sm text-gray-600">
-          <p>
-            Carefinder is a free, open directory of verified healthcare facilities in Nigeria.{' '}
-            <span className="text-gray-500">|</span> Data is regularly updated and community-verified.
+      <footer className="border-t border-gray-200 bg-gray-50">
+        <div className="mx-auto max-w-7xl px-4 py-10 text-center">
+          <p className="text-sm text-gray-600">
+            Carefinder is a free, open directory of verified healthcare facilities in Nigeria. Data is regularly updated and community-verified.
+          </p>
+          <p className="text-xs text-gray-500 mt-6">
+            © 2026 Carefinder · Nigeria&apos;s Civic Hospital Directory
           </p>
         </div>
-      </section>
+      </footer>
     </div>
   );
 }
