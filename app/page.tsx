@@ -133,7 +133,7 @@ export default function HomePage() {
           <div className="grid grid-cols-3 gap-4 sm:gap-6 py-6 sm:py-8">
             {stats.map((stat, index) => (
               <div key={index} className="text-center">
-                <div className="text-2xl sm:text-3xl font-bold text-emerald-600 mb-1">
+                <div className="text-2xl sm:text-4xl lg:text-5xl font-bold text-emerald-600 mb-1">
                   {stat.number}
                 </div>
                 <div className="text-xs sm:text-sm text-gray-600">{stat.label}</div>
@@ -144,7 +144,7 @@ export default function HomePage() {
       </section>
 
       {/* Features Section */}
-      <section className="px-4 py-12 sm:py-16 bg-white">
+      <section className="px-4 pt-8 pb-12 sm:py-16 bg-white">
         <div className="max-w-5xl mx-auto">
           <div className="text-center mb-12 sm:mb-14">
             <h2 className="text-2xl sm:text-3xl lg:text-4xl font-bold text-gray-900 mb-3">
