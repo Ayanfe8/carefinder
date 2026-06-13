@@ -87,7 +87,7 @@ export default function HomePage() {
               <span className="text-emerald-600">Get the Care You Need</span>
             </h1>
             <p className="text-base sm:text-lg text-gray-600 max-w-2xl mx-auto mb-8 leading-relaxed">
-              Navigate Nigeria's hospital landscape with confidence. Search, compare, and discover verified healthcare facilities across all 36 states.
+              Navigate Nigeria`'`s hospital landscape with confidence. Search, compare, and discover verified healthcare facilities across all 36 states.
             </p>
           </div>
 
@@ -186,7 +186,7 @@ export default function HomePage() {
             Start Finding Healthcare Today
           </h2>
           <p className="text-base sm:text-lg text-gray-600 mb-8">
-            Join thousands exploring Nigeria's hospital network. No signup required—search immediately.
+            Join thousands exploring Nigeria`'`s hospital network. No signup required—search immediately.
           </p>
           <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 justify-center">
             <button
@@ -204,14 +204,6 @@ export default function HomePage() {
           </div>
         </div>
       </section>
-
-      <footer className="border-t border-gray-200 bg-gray-50">
-        <div className="mx-auto max-w-7xl px-4 py-10 text-center">
-          <p className="text-sm text-gray-600">
-            Carefinder is a free, open directory of verified healthcare facilities in Nigeria. Data is regularly updated and community-verified.
-          </p>
-        </div>
-      </footer>
     </div>
   );
 }

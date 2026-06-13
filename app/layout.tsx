@@ -40,8 +40,15 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           </div>
         </header>
         <main>{children}</main>
-        <footer className="border-t border-gray-200 mt-8 py-6 text-center text-xs text-gray-500">
-          © {new Date().getFullYear()} Carefinder · Nigeria&apos;s Civic Hospital Directory
+        <footer className="border-t border-gray-200 bg-gray-50">
+          <div className="mx-auto max-w-7xl px-4 py-10 text-center">
+            <p className="text-sm text-gray-600">
+              Carefinder is a free, open directory of verified healthcare facilities in Nigeria. Data is regularly updated and community-verified.
+            </p>
+            <p className="mt-4 text-xs text-gray-500">
+              © {new Date().getFullYear()} Carefinder · Nigeria&apos;s Civic Hospital Directory
+            </p>
+          </div>
         </footer>
       </body>
     </html>
