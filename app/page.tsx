@@ -130,7 +130,7 @@ export default function HomePage() {
           </div>
 
           {/* Trust indicators */}
-          <div className="grid grid-cols-3 gap-4 sm:gap-6 py-6 sm:py-8 px-4 sm:px-6 -mx-4 sm:-mx-6 bg-emerald-50/50">
+          <div className="grid grid-cols-3 gap-4 sm:gap-6 py-6 sm:py-8">
             {stats.map((stat, index) => (
               <div key={index} className="text-center">
                 <div className="text-2xl sm:text-3xl font-bold text-emerald-600 mb-1">
