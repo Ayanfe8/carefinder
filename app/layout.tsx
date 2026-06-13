@@ -40,7 +40,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           </div>
         </header>
         <main>{children}</main>
-        <footer className="border-t border-gray-200 mt-20 py-8 text-center text-sm text-gray-500">
+        <footer className="border-t border-gray-200 mt-8 py-6 text-center text-xs text-gray-500">
           © {new Date().getFullYear()} Carefinder · Nigeria&apos;s Civic Hospital Directory
         </footer>
       </body>

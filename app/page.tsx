@@ -210,9 +210,6 @@ export default function HomePage() {
           <p className="text-sm text-gray-600">
             Carefinder is a free, open directory of verified healthcare facilities in Nigeria. Data is regularly updated and community-verified.
           </p>
-          <p className="text-xs text-gray-500 mt-6">
-            © 2026 Carefinder · Nigeria&apos;s Civic Hospital Directory
-          </p>
         </div>
       </footer>
     </div>
