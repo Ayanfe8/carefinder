@@ -78,7 +78,7 @@ export default function HomePage() {
   return (
     <div className="bg-white">
       {/* Hero Section with Stats */}
-      <section className="bg-gradient-to-b from-emerald-50 to-white px-4 py-16 sm:py-24">
+      <section className="bg-gradient-to-b from-emerald-50 to-white px-4 py-10 sm:py-24">
         <div className="max-w-4xl mx-auto">
           {/* Main heading and subheading */}
           <div className="text-center mb-10 sm:mb-12">
