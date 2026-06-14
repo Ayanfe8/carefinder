@@ -77,40 +77,53 @@ export default async function SearchPage({ searchParams }: SearchPageProps) {
   const hospitals = await searchHospitals(supabase, query, filters, pagination, sortBy);
 
   return (
-    <div className="max-w-6xl mx-auto px-4 py-8">
-      {/* Search bar */}
-      <div className="mb-6">
-        <Suspense>
-          <SearchBar defaultValue={query} />
-        </Suspense>
-      </div>
-
-      <div className="flex gap-8">
-        {/* Filter sidebar */}
-        <div className="hidden md:block w-52 flex-shrink-0">
+    <div className="min-h-screen bg-gray-50">
+      {/* Search header */}
+      <div className="bg-white border-b border-gray-200 px-4 py-4">
+        <div className="max-w-6xl mx-auto">
           <Suspense>
-            <FilterPanel />
+            <SearchBar defaultValue={query} />
           </Suspense>
         </div>
+      </div>
 
-        {/* Results + Map */}
-        <div className="flex-1 min-w-0">
-          {/* Map/list toggle — map only initialises when user explicitly switches */}
-          <MapToggle
-            hospitals={hospitals}
-            userLocation={
-              filters.lat != null && filters.lng != null
-                ? [filters.lng, filters.lat]
-                : null
-            }
-            radiusKm={filters.radius}
-          />
+      {/* Main content */}
+      <div className="max-w-6xl mx-auto px-4 py-6">
+        <div className="flex gap-6">
+          {/* Filter sidebar — desktop */}
+          <div className="hidden md:block w-56 flex-shrink-0">
+            <div className="bg-white rounded-xl border border-gray-200 p-4 sticky top-4">
+              <Suspense>
+                <FilterPanel />
+              </Suspense>
+            </div>
+          </div>
 
-          <ErrorBoundary>
-            <Suspense fallback={<ResultsListSkeleton />}>
-              <ResultsList hospitals={hospitals} hasGeolocation={hasGeolocation} query={query} />
-            </Suspense>
-          </ErrorBoundary>
+          {/* Results */}
+          <div className="flex-1 min-w-0">
+            {/* Mobile filter disclosure */}
+            <div className="md:hidden mb-4">
+              <Suspense>
+                <FilterPanel mobile />
+              </Suspense>
+            </div>
+
+            <MapToggle
+              hospitals={hospitals}
+              userLocation={
+                filters.lat != null && filters.lng != null
+                  ? [filters.lng, filters.lat]
+                  : null
+              }
+              radiusKm={filters.radius}
+            />
+
+            <ErrorBoundary>
+              <Suspense fallback={<ResultsListSkeleton />}>
+                <ResultsList hospitals={hospitals} hasGeolocation={hasGeolocation} query={query} />
+              </Suspense>
+            </ErrorBoundary>
+          </div>
         </div>
       </div>
     </div>

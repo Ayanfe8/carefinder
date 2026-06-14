@@ -1,7 +1,8 @@
 'use client';
 
 import { useRouter, usePathname, useSearchParams } from 'next/navigation';
-import { useCallback } from 'react';
+import { useCallback, useState } from 'react';
+import { SlidersHorizontal } from 'lucide-react';
 
 const SPECIALTIES = [
   { value: 'general', label: 'General' },
@@ -14,7 +15,11 @@ const SPECIALTIES = [
   { value: 'eye', label: 'Eye' },
 ];
 
-export function FilterPanel() {
+interface FilterPanelProps {
+  mobile?: boolean;
+}
+
+export function FilterPanel({ mobile = false }: FilterPanelProps) {
   const router = useRouter();
   const pathname = usePathname();
   const searchParams = useSearchParams();
@@ -58,10 +63,11 @@ export function FilterPanel() {
   };
 
   const hasActiveFilters = activeSpecialties.length > 0 || activeOwnership;
+  const [isOpen, setIsOpen] = useState(false);
 
-  return (
-    <aside aria-label="Search filters" className="space-y-6">
-      <div className="flex items-center justify-between">
+  const filterContent = (
+    <>
+      <div className="flex items-center justify-between mb-4">
         <h2 className="text-sm font-semibold text-gray-700 uppercase tracking-wide">Filters</h2>
         {hasActiveFilters && (
           <button
@@ -117,6 +123,39 @@ export function FilterPanel() {
           ))}
         </div>
       </fieldset>
+    </>
+  );
+
+  if (mobile) {
+    return (
+      <div>
+        <button
+          type="button"
+          onClick={() => setIsOpen(!isOpen)}
+          className="flex items-center gap-2 w-full bg-white border border-gray-200 rounded-xl px-4 py-3 text-sm font-medium text-gray-700 hover:bg-gray-50 transition-colors"
+          aria-expanded={isOpen}
+          aria-label="Toggle filters"
+        >
+          <SlidersHorizontal className="w-4 h-4" />
+          <span>Filters</span>
+          {hasActiveFilters && (
+            <span className="ml-auto bg-emerald-100 text-emerald-700 text-xs px-2 py-0.5 rounded-full">
+              {activeSpecialties.length + (activeOwnership ? 1 : 0)}
+            </span>
+          )}
+        </button>
+        {isOpen && (
+          <div className="bg-white rounded-xl border border-gray-200 p-4 mt-2 space-y-6">
+            {filterContent}
+          </div>
+        )}
+      </div>
+    );
+  }
+
+  return (
+    <aside aria-label="Search filters" className="space-y-6">
+      {filterContent}
     </aside>
   );
 }
