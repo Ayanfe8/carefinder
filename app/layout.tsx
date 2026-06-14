@@ -15,6 +15,9 @@ export const metadata: Metadata = {
     template: '%s | Carefinder',
   },
   description: "Nigeria's civic hospital directory — find, filter, and share hospital information.",
+  icons: {
+    icon: '/favicon.svg',
+  },
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
