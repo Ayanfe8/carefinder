@@ -35,7 +35,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
               </Link>
               <Link
                 href="/login"
-                className="text-gray-600 hover:text-gray-900 transition-colors"
+                className="hidden sm:block text-gray-600 hover:text-gray-900 transition-colors"
               >
                 Sign In
               </Link>
