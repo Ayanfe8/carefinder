@@ -22,7 +22,7 @@ const BASE_HOSPITAL: Hospital = {
   email: 'info@uch-ibadan.edu.ng',
   specialties: ['general', 'emergency', 'maternity', 'cardiology'],
   ownership: 'public',
-  description_md: '# UCH Ibadan\n\nNigeria\'s **first** teaching hospital.',
+  description_md: "# UCH Ibadan\n\nNigeria's **first** teaching hospital.",
   visiting_hours: 'Monday – Friday: 8 am – 5 pm',
   rating_avg: 4.5,
   review_count: 32,
@@ -46,7 +46,9 @@ const APPROVED_REVIEWS: Review[] = [
 describe('HospitalDetail', () => {
   it('renders the hospital name as a heading', () => {
     render(<HospitalDetail hospital={BASE_HOSPITAL} />);
-    expect(screen.getByRole('heading', { name: /University College Hospital/i })).toBeInTheDocument();
+    expect(
+      screen.getByRole('heading', { name: /University College Hospital/i })
+    ).toBeInTheDocument();
   });
 
   it('renders address and city', () => {
@@ -58,8 +60,11 @@ describe('HospitalDetail', () => {
 
   it('renders the phone number as a tel link', () => {
     render(<HospitalDetail hospital={BASE_HOSPITAL} />);
-    const phoneLink = screen.getByRole('link', { name: /2348067890124/i });
-    expect(phoneLink).toHaveAttribute('href', 'tel:+2348067890124');
+    const phoneLinks = screen.getAllByRole('link', { name: /2348067890124/i });
+    expect(phoneLinks.length).toBeGreaterThanOrEqual(1);
+    phoneLinks.forEach((link) => {
+      expect(link).toHaveAttribute('href', 'tel:+2348067890124');
+    });
   });
 
   it('renders the email as a mailto link', () => {
@@ -98,13 +103,19 @@ describe('HospitalDetail', () => {
 
   it('renders visiting hours section', () => {
     render(<HospitalDetail hospital={BASE_HOSPITAL} />);
-    expect(screen.getByRole('region', { name: /visiting hours/i })).toBeInTheDocument();
+    expect(
+      screen.getByRole('region', { name: /visiting hours/i })
+    ).toBeInTheDocument();
     expect(screen.getByText(/Monday/)).toBeInTheDocument();
   });
 
   it('renders approved reviews', () => {
-    render(<HospitalDetail hospital={BASE_HOSPITAL} reviews={APPROVED_REVIEWS} />);
-    expect(screen.getByText('Excellent care and clean facilities.')).toBeInTheDocument();
+    render(
+      <HospitalDetail hospital={BASE_HOSPITAL} reviews={APPROVED_REVIEWS} />
+    );
+    expect(
+      screen.getByText('Excellent care and clean facilities.')
+    ).toBeInTheDocument();
   });
 
   it('shows "No reviews yet" when reviews list is empty', () => {
