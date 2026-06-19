@@ -27,28 +27,37 @@ function sortHospitals(hospitals: Hospital[], key: SortKey): Hospital[] {
   });
 }
 
-export function ResultsList({ hospitals, hasGeolocation = false, query = '' }: ResultsListProps) {
+export function ResultsList({
+  hospitals,
+  hasGeolocation = false,
+  query = '',
+}: ResultsListProps) {
   const [sortBy, setSortBy] = useState<SortKey>('name');
 
-  const sorted = useMemo(() => sortHospitals(hospitals, sortBy), [hospitals, sortBy]);
+  const sorted = useMemo(
+    () => sortHospitals(hospitals, sortBy),
+    [hospitals, sortBy]
+  );
 
   if (hospitals.length === 0) {
     return (
       <div className="py-16 text-center text-gray-500" role="status">
         <p className="text-lg font-medium mb-1">No hospitals found</p>
-        <p className="text-sm">Try a different search term or adjust your filters.</p>
+        <p className="text-sm">
+          Try a different search term or adjust your filters.
+        </p>
       </div>
     );
   }
 
   return (
     <section aria-label="Search results">
-      <div className="flex items-center justify-between mb-4">
+      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 mb-4">
         <p className="text-sm text-gray-500" aria-live="polite">
           {hospitals.length} hospital{hospitals.length !== 1 ? 's' : ''} found
         </p>
 
-        <div className="flex items-center gap-3">
+        <div className="flex flex-wrap items-center gap-2 sm:gap-3">
           <ExportButton hospitals={hospitals} query={query} />
           <ShareButton hospitals={hospitals} />
 
@@ -66,7 +75,8 @@ export function ResultsList({ hospitals, hasGeolocation = false, query = '' }: R
               <option value="name">Name (A–Z)</option>
               <option value="rating">Rating (highest first)</option>
               <option value="distance" disabled={!hasGeolocation}>
-                Distance {!hasGeolocation ? '(enable location)' : '(nearest first)'}
+                Distance{' '}
+                {!hasGeolocation ? '(enable location)' : '(nearest first)'}
               </option>
             </select>
           </div>
