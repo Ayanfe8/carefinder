@@ -1,7 +1,20 @@
-import DOMPurify from 'dompurify';
+import DOMPurify from 'isomorphic-dompurify';
 import { marked } from 'marked';
 
-const ALLOWED_TAGS = ['p', 'strong', 'em', 'ul', 'ol', 'li', 'a', 'h1', 'h2', 'h3', 'h4', 'br'];
+const ALLOWED_TAGS = [
+  'p',
+  'strong',
+  'em',
+  'ul',
+  'ol',
+  'li',
+  'a',
+  'h1',
+  'h2',
+  'h3',
+  'h4',
+  'br',
+];
 const ALLOWED_ATTR = ['href', 'target', 'rel'];
 
 /**
