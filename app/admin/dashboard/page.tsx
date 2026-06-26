@@ -1,8 +1,8 @@
 import Link from 'next/link';
 import { createServiceClient } from '@/lib/supabase/server';
 import { getAdminHospitals } from '@/lib/supabase/queries';
-import { deleteHospitalAction } from '@/app/admin/actions';
 import { AdminHeader } from '@/components/admin/AdminHeader';
+import { DeleteHospitalForm } from '@/components/admin/DeleteHospitalForm';
 import type { Hospital } from '@/lib/types';
 
 const PAGE_SIZE = 20;
@@ -44,16 +44,22 @@ export default async function AdminDashboardPage({ searchParams }: Props) {
               <tr className="border-b border-gray-100 bg-gray-50 text-left">
                 <th className="px-4 py-3 font-medium text-gray-500">Name</th>
                 <th className="px-4 py-3 font-medium text-gray-500">City</th>
-                <th className="px-4 py-3 font-medium text-gray-500 text-center">Specialties</th>
+                <th className="px-4 py-3 font-medium text-gray-500 text-center">
+                  Specialties
+                </th>
                 <th className="px-4 py-3 font-medium text-gray-500">Status</th>
                 <th className="px-4 py-3 font-medium text-gray-500">Created</th>
-                <th className="px-4 py-3 font-medium text-gray-500 text-right">Actions</th>
+                <th className="px-4 py-3 font-medium text-gray-500 text-right">
+                  Actions
+                </th>
               </tr>
             </thead>
             <tbody className="divide-y divide-gray-50">
               {hospitals.map((h) => (
                 <tr key={h.id} className="hover:bg-gray-50 transition-colors">
-                  <td className="px-4 py-3 font-medium text-gray-900">{h.name}</td>
+                  <td className="px-4 py-3 font-medium text-gray-900">
+                    {h.name}
+                  </td>
                   <td className="px-4 py-3 text-gray-600">{h.city}</td>
                   <td className="px-4 py-3 text-gray-600 text-center">
                     {h.specialties.length}
@@ -76,15 +82,7 @@ export default async function AdminDashboardPage({ searchParams }: Props) {
                       >
                         Edit
                       </Link>
-                      <form action={deleteHospitalAction}>
-                        <input type="hidden" name="id" value={h.id} />
-                        <button
-                          type="submit"
-                          className="text-red-500 hover:text-red-700 font-medium"
-                        >
-                          Delete
-                        </button>
-                      </form>
+                      <DeleteHospitalForm id={h.id} name={h.name} />
                     </div>
                   </td>
                 </tr>
