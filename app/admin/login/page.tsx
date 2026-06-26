@@ -47,7 +47,9 @@ export default function AdminLoginPage() {
 
         <div className="bg-white rounded-xl border border-gray-200 p-8 w-full">
           <h1 className="text-2xl font-bold text-gray-900 mb-1">Admin Login</h1>
-          <p className="text-sm text-gray-600 mb-8">Carefinder Admin Portal</p>
+          <p className="text-sm text-gray-600 mb-8">
+            Enter your admin credentials to continue
+          </p>
 
           <form onSubmit={handleSubmit} noValidate>
             <div className="space-y-4">
