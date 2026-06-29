@@ -102,14 +102,17 @@ export default function HomePage() {
               aria-label="Hospital search"
               className="flex flex-col sm:flex-row gap-2"
             >
-              <input
-                type="search"
-                value={query}
-                onChange={(e) => setQuery(e.target.value)}
-                placeholder="Search by hospital name, city, or specialty…"
-                aria-label="Search hospitals"
-                className="flex-1 rounded-lg border border-gray-300 px-4 py-3.5 text-base text-gray-900 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-transparent transition"
-              />
+              <div className="relative flex-1">
+                <Search className="absolute left-3.5 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400 pointer-events-none" />
+                <input
+                  type="search"
+                  value={query}
+                  onChange={(e) => setQuery(e.target.value)}
+                  placeholder="Search by hospital name, city, or specialty…"
+                  aria-label="Search hospitals"
+                  className="w-full rounded-lg border border-gray-300 pl-11 pr-4 py-3.5 text-base text-gray-900 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-transparent transition"
+                />
+              </div>
               <button
                 type="submit"
                 className="bg-emerald-600 hover:bg-emerald-700 text-white font-semibold px-6 sm:px-8 py-3.5 rounded-lg transition-colors whitespace-nowrap active:bg-emerald-800"
@@ -144,7 +147,7 @@ export default function HomePage() {
       </section>
 
       {/* Features Section */}
-      <section className="px-4 pt-8 pb-12 sm:py-16 bg-white">
+      <section className="px-4 pt-12 pb-16 sm:py-20 bg-gray-50 border-t border-gray-100">
         <div className="max-w-5xl mx-auto">
           <div className="text-center mb-12 sm:mb-14">
             <h2 className="text-2xl sm:text-3xl lg:text-4xl font-bold text-gray-900 mb-3">
