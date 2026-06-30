@@ -1,12 +1,8 @@
 import { Suspense } from 'react';
-import { createClient } from '@/lib/supabase/server';
-import { searchHospitals } from '@/lib/supabase/queries';
 import { SearchBar } from '@/components/search/SearchBar';
 import { FilterPanel } from '@/components/search/FilterPanel';
-import { ResultsList } from '@/components/search/ResultsList';
 import { ResultsListSkeleton } from '@/components/search/ResultsListSkeleton';
-import { MapToggle } from '@/components/search/MapToggle';
-import { ErrorBoundary } from '@/components/ui/ErrorBoundary';
+import { SearchResults } from '@/components/search/SearchResults';
 import type { SearchFilters, Pagination } from '@/lib/types';
 import type { Metadata } from 'next';
 
@@ -70,11 +66,8 @@ function parseSearchParams(raw: SearchPageProps['searchParams']): {
   };
 }
 
-export default async function SearchPage({ searchParams }: SearchPageProps) {
+export default function SearchPage({ searchParams }: SearchPageProps) {
   const { query, filters, pagination, sortBy, hasGeolocation } = parseSearchParams(searchParams);
-
-  const supabase = createClient();
-  const hospitals = await searchHospitals(supabase, query, filters, pagination, sortBy);
 
   return (
     <div className="min-h-screen bg-gray-50">
@@ -108,21 +101,15 @@ export default async function SearchPage({ searchParams }: SearchPageProps) {
               </Suspense>
             </div>
 
-            <MapToggle
-              hospitals={hospitals}
-              userLocation={
-                filters.lat != null && filters.lng != null
-                  ? [filters.lng, filters.lat]
-                  : null
-              }
-              radiusKm={filters.radius}
-            />
-
-            <ErrorBoundary>
-              <Suspense fallback={<ResultsListSkeleton />}>
-                <ResultsList hospitals={hospitals} hasGeolocation={hasGeolocation} query={query} />
-              </Suspense>
-            </ErrorBoundary>
+            <Suspense fallback={<ResultsListSkeleton />}>
+              <SearchResults
+                query={query}
+                filters={filters}
+                pagination={pagination}
+                sortBy={sortBy}
+                hasGeolocation={hasGeolocation}
+              />
+            </Suspense>
           </div>
         </div>
       </div>
