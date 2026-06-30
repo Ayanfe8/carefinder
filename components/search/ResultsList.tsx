@@ -1,6 +1,7 @@
 'use client';
 
 import { useState, useMemo } from 'react';
+import { ArrowUpDown } from 'lucide-react';
 import { HospitalCard } from '@/components/hospital/HospitalCard';
 import { ExportButton } from '@/components/ui/ExportButton';
 import { ShareButton } from '@/components/ui/ShareButton';
@@ -61,7 +62,8 @@ export function ResultsList({
           <ExportButton hospitals={hospitals} query={query} />
           <ShareButton hospitals={hospitals} />
 
-          <div className="flex items-center gap-2">
+          <div className="flex items-center gap-1.5">
+            <ArrowUpDown className="w-3.5 h-3.5 text-gray-400" />
             <label htmlFor="sort-select" className="text-sm text-gray-500">
               Sort:
             </label>
