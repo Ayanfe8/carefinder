@@ -3,6 +3,7 @@ import { SearchBar } from '@/components/search/SearchBar';
 import { FilterPanel } from '@/components/search/FilterPanel';
 import { ResultsListSkeleton } from '@/components/search/ResultsListSkeleton';
 import { SearchResults } from '@/components/search/SearchResults';
+import { SignUpBanner } from '@/components/search/SignUpBanner';
 import type { SearchFilters, Pagination } from '@/lib/types';
 import type { Metadata } from 'next';
 
@@ -10,7 +11,9 @@ interface SearchPageProps {
   searchParams: { [key: string]: string | string[] | undefined };
 }
 
-export async function generateMetadata({ searchParams }: SearchPageProps): Promise<Metadata> {
+export async function generateMetadata({
+  searchParams,
+}: SearchPageProps): Promise<Metadata> {
   const q = typeof searchParams['q'] === 'string' ? searchParams['q'] : '';
   return {
     title: q ? `"${q}" — Hospital Search` : 'Find Hospitals',
@@ -35,19 +38,28 @@ function parseSearchParams(raw: SearchPageProps['searchParams']): {
 
   const ownershipRaw = raw['ownership'];
   const ownership =
-    ownershipRaw === 'public' || ownershipRaw === 'private' ? ownershipRaw : null;
+    ownershipRaw === 'public' || ownershipRaw === 'private'
+      ? ownershipRaw
+      : null;
 
-  const lat = typeof raw['lat'] === 'string' ? parseFloat(raw['lat']) : undefined;
-  const lng = typeof raw['lng'] === 'string' ? parseFloat(raw['lng']) : undefined;
-  const radius = typeof raw['radius'] === 'string' ? parseFloat(raw['radius']) : null;
+  const lat =
+    typeof raw['lat'] === 'string' ? parseFloat(raw['lat']) : undefined;
+  const lng =
+    typeof raw['lng'] === 'string' ? parseFloat(raw['lng']) : undefined;
+  const radius =
+    typeof raw['radius'] === 'string' ? parseFloat(raw['radius']) : null;
 
-  const hasGeolocation = lat !== undefined && lng !== undefined && !isNaN(lat) && !isNaN(lng);
+  const hasGeolocation =
+    lat !== undefined && lng !== undefined && !isNaN(lat) && !isNaN(lng);
 
   const sortRaw = raw['sort'];
   const sortBy: 'name' | 'rating' | 'distance' =
     sortRaw === 'rating' || sortRaw === 'distance' ? sortRaw : 'name';
 
-  const page = typeof raw['page'] === 'string' ? Math.max(1, parseInt(raw['page'], 10)) : 1;
+  const page =
+    typeof raw['page'] === 'string'
+      ? Math.max(1, parseInt(raw['page'], 10))
+      : 1;
 
   const filters: SearchFilters = {
     specialty,
@@ -67,7 +79,8 @@ function parseSearchParams(raw: SearchPageProps['searchParams']): {
 }
 
 export default function SearchPage({ searchParams }: SearchPageProps) {
-  const { query, filters, pagination, sortBy, hasGeolocation } = parseSearchParams(searchParams);
+  const { query, filters, pagination, sortBy, hasGeolocation } =
+    parseSearchParams(searchParams);
 
   return (
     <div className="min-h-screen bg-gray-50">
@@ -100,6 +113,8 @@ export default function SearchPage({ searchParams }: SearchPageProps) {
                 <FilterPanel mobile />
               </Suspense>
             </div>
+
+            <SignUpBanner />
 
             <Suspense fallback={<ResultsListSkeleton />}>
               <SearchResults
